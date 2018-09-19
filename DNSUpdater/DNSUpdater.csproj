@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoDaddyHttpClient.cs" />
     <Compile Include="Models\Enums\DNSRecordType.cs" />
     <Compile Include="Models\GoDaddyDomain.cs" />
     <Compile Include="GoDaddyAPI.cs" />

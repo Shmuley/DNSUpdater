@@ -9,25 +9,34 @@ namespace DNSUpdater
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var goDaddyAPI = new GoDaddyAPI();
-
-            //goDaddyAPI.GetDomains().GetAwaiter().GetResult();
 
             var domain = new GoDaddyDomain()
             {
                 Domain = "hernanfam.com"
             };
-            goDaddyAPI.GetDomainRecords(domain, DNSRecordType.A, "@").GetAwaiter().GetResult();
+            await goDaddyAPI.GetDomainRecords(domain, DNSRecordType.A, "@");
 
-            //var ip = goDaddyAPI.GetPublicIP().GetAwaiter().GetResult();
+            var ip = await goDaddyAPI.GetPublicIP();
 
-            //Console.WriteLine(ip);
+            var record = new List<GoDaddyDNSRecord>()
+            {
+                {
+                    new GoDaddyDNSRecord
+                    {
+                        data = ip,
+                        name = "@",
+                        ttl = 3600,
+                        type = "A"
+                    }
+                }
+            };
 
-            goDaddyAPI.UpdatePrimaryARecord(domain).GetAwaiter().GetResult();
+            await goDaddyAPI.UpdateDNSRecord(domain, record);
 
-            goDaddyAPI.GetDomainRecords(domain, DNSRecordType.A, "@").GetAwaiter().GetResult();
+            await goDaddyAPI.GetDomainRecords(domain, DNSRecordType.A, "@");
         }
     }
 }

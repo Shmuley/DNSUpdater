@@ -16,7 +16,7 @@ namespace DNSUpdater
         private const string URL = "https://api.godaddy.com/v1/";
         private readonly string accessKey = "AEdBCuyrDvW_6XVDcvdAc7MbSoQbUkqkwq";
         private readonly string secretKey = "6XVGwL6a88WW2V1G1fDiHd";
-        private readonly MediaTypeWithQualityHeaderValue requestHeaders = new MediaTypeWithQualityHeaderValue("application/json");
+        private readonly string requestHeaders = "application/json";
 
         public async Task GetDomains()
         {
@@ -46,18 +46,8 @@ namespace DNSUpdater
 
         public async Task GetDomainRecords(GoDaddyDomain domain, DNSRecordType type, string name)
         {
-            using (var client = new HttpClient() {
-                BaseAddress = new Uri(URL),
-            })
+            using (var client = new GoDaddyHttpClient(accessKey, secretKey, URL, requestHeaders))
             {
-                var authorization = new AuthenticationHeaderValue("sso-key", $"{accessKey}:{secretKey}");
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(requestHeaders);
-                client.DefaultRequestHeaders.Authorization = authorization;
-                
-
-                var domainRecordCall = $"domains/{domain.Domain}/records";
                 var domainRecrodTypeCall = $"domains/{domain.Domain}/records/{type}/{name}";
 
                 //var call = type.HasValue ? domainRecrodTypeCall : domainRecordCall;
@@ -77,29 +67,11 @@ namespace DNSUpdater
             }
         }
 
-        public async Task UpdatePrimaryARecord(GoDaddyDomain domain)
+        public async Task UpdateDNSRecord(GoDaddyDomain domain, List<GoDaddyDNSRecord> record)
         {
-            using (var client = new HttpClient())
+            using (var client = new GoDaddyHttpClient(accessKey, secretKey, URL, requestHeaders))
             {
-                var authorization = new AuthenticationHeaderValue("sso-key", $"{accessKey}:{secretKey}");
-
-                client.BaseAddress = new Uri(URL);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(requestHeaders);
-                client.DefaultRequestHeaders.Authorization = authorization;
-
-                var record = new List<GoDaddyDNSRecord>()
-                {
-                    { new GoDaddyDNSRecord {
-                        name = "@",
-                        type = "A",
-                        data = "98.114.169.221",
-                        //data = await GetPublicIP(),
-                        ttl = 3600
-                        }
-                    }
-                };
-
+                var ip = await GetPublicIP();
                 var call = $"domains/{domain.Domain}/records/A/@";
 
                 var response = await client.PutAsJsonAsync(call, record);
@@ -111,6 +83,8 @@ namespace DNSUpdater
         {
             using (var client = new HttpClient())
             {
+                var requestHeaders = new MediaTypeWithQualityHeaderValue("application/json");
+
                 var uri = new Uri("https://api.ipify.org");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(requestHeaders);
