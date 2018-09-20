@@ -14,8 +14,9 @@ namespace DNSUpdater
         {
             EncryptConfigSection("userSettings/DNSUpdater.Properties.GoDaddyAPI");
 
-            GoDaddyAPI.Default.AccessKey = args[0];
-            GoDaddyAPI.Default.SecretKey = args[1];
+            GoDaddyAPI.Default.DomainName = args[0];
+            GoDaddyAPI.Default.AccessKey = args[1];
+            GoDaddyAPI.Default.SecretKey = args[2];
 
             GoDaddyDomain domain = null;
             List<GoDaddyDNSRecord> record = null;
@@ -26,7 +27,7 @@ namespace DNSUpdater
             {
                 try
                 {
-                    domain = await goDaddyAPI.GetDomain(client, "hernanfam.com");
+                    domain = await goDaddyAPI.GetDomain(client, GoDaddyAPI.Default.DomainName);
                     Console.WriteLine($"Domain Retrieved: {domain.Domain}");
                 }
                 catch (HttpRequestException ex)
