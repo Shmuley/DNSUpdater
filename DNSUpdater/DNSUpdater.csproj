@@ -52,10 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GoDaddyHttpClient.cs" />
+    <Compile Include="Helpers\GoDaddyHttpClient.cs" />
     <Compile Include="Models\Enums\DNSRecordType.cs" />
     <Compile Include="Models\GoDaddyDomain.cs" />
-    <Compile Include="GoDaddyAPICalls.cs" />
+    <Compile Include="Helpers\GoDaddyAPICalls.cs" />
     <Compile Include="Models\GoDaddyDNSRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Configuration;
 using System.Threading.Tasks;
-using System.Collections.Specialized;
 using DNSUpdater.Properties;
 
 namespace DNSUpdater
