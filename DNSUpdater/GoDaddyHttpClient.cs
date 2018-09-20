@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DNSUpdater.Properties;
+using System;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -7,14 +10,15 @@ namespace DNSUpdater
     public class GoDaddyHttpClient : HttpClient
     {
         private AuthenticationHeaderValue SsoKey { get; set; }
-        public Uri Uri {get; set;}  = new Uri("https://api.godaddy.com/v1/");
+        public Uri Uri {get; set;}
         public MediaTypeWithQualityHeaderValue HeaderValue { get; set; }
 
-        public GoDaddyHttpClient(string accessKey, string secretKey, string url, string headerValue)
+        public GoDaddyHttpClient()
         {
-            Uri = new Uri(url);
-            HeaderValue = new MediaTypeWithQualityHeaderValue(headerValue);
-            SsoKey = new AuthenticationHeaderValue("sso-key", $"{accessKey}:{secretKey}");
+            Uri = new Uri(ConfigurationManager.AppSettings["URL"]);
+            HeaderValue = new MediaTypeWithQualityHeaderValue(ConfigurationManager.AppSettings["RequestHeaders"]);
+            SsoKey = new AuthenticationHeaderValue(
+                "sso-key", $"{GoDaddyAPI.Default.AccessKey}:{GoDaddyAPI.Default.SecretKey}");
 
             BaseAddress = Uri;
             DefaultRequestHeaders.Clear();

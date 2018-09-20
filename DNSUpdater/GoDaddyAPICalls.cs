@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using Newtonsoft.Json.Linq;
-using System.Net.Http.Formatting;
 
 namespace DNSUpdater
 {
@@ -62,12 +56,7 @@ namespace DNSUpdater
         {
             using (var client = new HttpClient())
             {
-                var requestHeaders = new MediaTypeWithQualityHeaderValue("application/json");
-
                 var uri = new Uri("https://api.ipify.org");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(requestHeaders);
-
                 var response = await client.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -79,7 +68,6 @@ namespace DNSUpdater
                 {
                     return null;
                 }
-
             }
         }
     }
