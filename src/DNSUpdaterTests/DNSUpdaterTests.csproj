@@ -71,9 +71,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DNSUpdater\DNSUpdater.csproj">
-      <Project>{072E8FDB-EDD8-43C4-9E9C-0C38BEC535C3}</Project>
-      <Name>DNSUpdater</Name>
+    <ProjectReference Include="..\DNSUpdaterService\DNSUpdaterService.csproj">
+      <Project>{6216c91a-263c-444a-bc63-01735030e1a4}</Project>
+      <Name>DNSUpdaterService</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -1,28 +1,26 @@
-﻿using System;
+﻿using DNSUpdater;
+using DNSUpdaterService.Properties;
+using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Configuration;
-using System.Threading.Tasks;
-using DNSUpdater.Properties;
 using System.Diagnostics;
-using System.Timers;
+using System.Net.Http;
 using System.ServiceProcess;
+using System.Timers;
+using System.Configuration;
 
-namespace DNSUpdater
+namespace DNSUpdaterService
 {
-    class Program : ServiceBase
+    public partial class DNSUpdater : ServiceBase
     {
-        public Program(string[] args)
+        public DNSUpdater()
         {
+            InitializeComponent();
+
             ServiceName = "DNSUpdater";
             CanStop = true;
             CanPauseAndContinue = true;
             AutoLog = true;
-        }
 
-        static void Main(string[] args)
-        {
-            Run(new Program(args));
         }
 
         protected override void OnStart(string[] args)
@@ -40,9 +38,10 @@ namespace DNSUpdater
             };
             timer.Elapsed += new ElapsedEventHandler(OnTimer);
             timer.Start();
+
         }
 
-        private async void OnTimer(object sender, ElapsedEventArgs args)
+        private async void OnTimer(object sender, ElapsedEventArgs e)
         {
             EncryptConfigSection("userSettings/DNSUpdater.Properties.GoDaddyAPI");
 
@@ -86,6 +85,12 @@ namespace DNSUpdater
                 //    EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
                 //}
             }
+
+        }
+
+        protected override void OnStop()
+        {
+            EventLog.WriteEntry("Stopping Service");
         }
 
         private static void EncryptConfigSection(string sectionKey)
@@ -106,5 +111,6 @@ namespace DNSUpdater
             }
 
         }
+
     }
 }

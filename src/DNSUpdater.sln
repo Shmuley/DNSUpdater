@@ -7,10 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNSUpdater", "DNSUpdater\DN
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18E0DF2F-2274-483B-869F-25DCFA6D6813}"
 	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yml = azure-pipelines.yml
+		..\azure-pipelines.yml = ..\azure-pipelines.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNSUpdaterTests", "DNSUpdaterTests\DNSUpdaterTests.csproj", "{1880C901-710C-4FE5-BAAA-0C8E6599DA58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNSUpdaterService", "DNSUpdaterService\DNSUpdaterService.csproj", "{6216C91A-263C-444A-BC63-01735030E1A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{1880C901-710C-4FE5-BAAA-0C8E6599DA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1880C901-710C-4FE5-BAAA-0C8E6599DA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1880C901-710C-4FE5-BAAA-0C8E6599DA58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6216C91A-263C-444A-BC63-01735030E1A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6216C91A-263C-444A-BC63-01735030E1A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6216C91A-263C-444A-BC63-01735030E1A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6216C91A-263C-444A-BC63-01735030E1A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
