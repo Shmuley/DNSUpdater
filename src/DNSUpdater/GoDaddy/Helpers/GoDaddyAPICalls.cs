@@ -41,7 +41,7 @@ namespace DNSUpdater
             }
         }
 
-        public async Task UpdateDNSRecord(GoDaddyHttpClient client, GoDaddyDomain domain, List<GoDaddyDNSRecord> record)
+        public async Task<List<GoDaddyDNSRecord>> UpdateDNSRecord(GoDaddyHttpClient client, GoDaddyDomain domain, List<GoDaddyDNSRecord> record)
         {
             var ip = await GetPublicIP();
             record[0].data = ip;
@@ -49,7 +49,16 @@ namespace DNSUpdater
             var call = $"domains/{domain.Domain}/records/A/@";
 
             var response = await client.PutAsJsonAsync(call, record);
-            response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                var updatedRecord = await response.Content.ReadAsAsync<List<GoDaddyDNSRecord>>();
+                return updatedRecord;
+            }
+            else
+            {
+                response.EnsureSuccessStatusCode();
+                return null;
+            }
         }
 
         public async Task<string> GetPublicIP()

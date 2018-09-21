@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace DNSUpdater.Tests
 {
@@ -16,38 +17,85 @@ namespace DNSUpdater.Tests
         [TestMethod()]
         public void GetDomainTest()
         {
-            var expected = new GoDaddyDomain()
+            using (var client = new GoDaddyHttpClient())
             {
-                Domain = "hernanfam.com"
-            };
+                var expected = new GoDaddyDomain()
+                {
+                    Domain = "000.biz"
+                };
 
-            var client = new GoDaddyHttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    "sso-key", "UzQxLikm_46KxDFnbjN7cQjmw6wocia:46L26ydpkwMaKZV6uVdDWe");
+                client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("sso-key", "AEdBCuyrDvW_6XVDcvdAc7MbSoQbUkqkwq:6XVGwL6a88WW2V1G1fDiHd");
+                var goDaddyApi = new GoDaddyAPICalls();
+                var actual = goDaddyApi.GetDomain(client, "000.biz").GetAwaiter().GetResult();
 
-            var goDaddyApi = new GoDaddyAPICalls();
-            var actual = goDaddyApi.GetDomain(client, "hernanfam.com").GetAwaiter().GetResult();
-
-            Assert.AreEqual(expected.Domain, actual.Domain);
+                Assert.AreEqual(expected.Domain, actual.Domain);
+            }
         }
 
         [TestMethod()]
         public void GetDomainRecordsTest()
         {
-            var expected = new GoDaddyDNSRecord()
+            using(var client = new GoDaddyHttpClient())
             {
-                name = "@"
-            };
+                var expected = new GoDaddyDNSRecord()
+                {
+                    name = "@"
+                };
 
-            var client = new GoDaddyHttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    "sso-key", "UzQxLikm_46KxDFnbjN7cQjmw6wocia:46L26ydpkwMaKZV6uVdDWe");
+                client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("sso-key", "AEdBCuyrDvW_6XVDcvdAc7MbSoQbUkqkwq:6XVGwL6a88WW2V1G1fDiHd");
+                var goDaddyApi = new GoDaddyAPICalls();
+                var domain = goDaddyApi.GetDomain(client, "000.biz").GetAwaiter().GetResult();
+                var actual = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
 
+                Assert.AreEqual(expected.name, actual[0].name);
+            }
+        }
+
+        [TestMethod()]
+        public void UpdateDNSRecordTest()
+        {
+            using (var client = new GoDaddyHttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "sso-key", "UzQxLikm_46KxDFnbjN7cQjmw6wocia:46L26ydpkwMaKZV6uVdDWe");
+                client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
+
+                var goDaddyApi = new GoDaddyAPICalls();
+
+                var expected = "8.8.8.8";
+
+                var domain = goDaddyApi.GetDomain(client, "000.biz").GetAwaiter().GetResult();
+                var records = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
+
+                goDaddyApi.UpdateDNSRecord(client, domain, records).GetAwaiter();
+
+                var actual = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
+
+                Assert.AreEqual(expected, actual[0].data);
+            }
+        }
+
+        [TestMethod()]
+        public void GetPublicIPTest()
+        {
+            string expected = null;
+
+            using(var client = new HttpClient())
+            {
+               var response = client.GetAsync("https://api.ipify.org").GetAwaiter().GetResult();
+               expected = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
             var goDaddyApi = new GoDaddyAPICalls();
-            var domain = goDaddyApi.GetDomain(client, "hernanfam.com").GetAwaiter().GetResult();
-            var actual = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
+            var actual = goDaddyApi.GetPublicIP().GetAwaiter().GetResult();
 
-            Assert.AreEqual(expected.name, actual[0].name);
+            Assert.AreEqual(expected, actual);
+
         }
     }
 }
