@@ -9,7 +9,7 @@ namespace DNSUpdater
 {
     public class GoDaddyHttpClient : HttpClient
     {
-        private AuthenticationHeaderValue SsoKey { get; set; }
+        public AuthenticationHeaderValue SsoKey { get; set; }
         public Uri Uri {get; set;}
         public MediaTypeWithQualityHeaderValue HeaderValue { get; set; }
 
@@ -24,6 +24,29 @@ namespace DNSUpdater
             DefaultRequestHeaders.Clear();
             DefaultRequestHeaders.Accept.Add(HeaderValue);
             DefaultRequestHeaders.Authorization = SsoKey;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            GoDaddyHttpClient compare = obj as GoDaddyHttpClient;
+            if (compare != null &&
+                Uri.OriginalString == compare.Uri.OriginalString &&
+                HeaderValue.MediaType == compare.HeaderValue.MediaType &&
+                SsoKey.Parameter == compare.SsoKey.Parameter)
+            {
+                return true;
+            }
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
