@@ -65,7 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\DNSUpdater\App.config">
+    <None Include="..\DNSUpdaterService\App.config">
       <Link>App.config</Link>
     </None>
     <None Include="packages.config" />
