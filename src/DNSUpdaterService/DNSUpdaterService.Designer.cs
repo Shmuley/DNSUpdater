@@ -1,6 +1,6 @@
 ﻿namespace DNSUpdaterService
 {
-    partial class DNSUpdater
+    partial class DNSUpdaterService
     {
         /// <summary> 
         /// Required designer variable.

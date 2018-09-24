@@ -10,9 +10,9 @@ using System.Configuration;
 
 namespace DNSUpdaterService
 {
-    public partial class DNSUpdater : ServiceBase
+    public partial class DNSUpdaterService : ServiceBase
     {
-        public DNSUpdater(string[] args)
+        public DNSUpdaterService(string[] args)
         {
             InitializeComponent();
 

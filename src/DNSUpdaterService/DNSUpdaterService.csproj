@@ -55,11 +55,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DNSUpdater.cs">
+    <Compile Include="DNSUpdaterService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DNSUpdater.Designer.cs">
-      <DependentUpon>DNSUpdater.cs</DependentUpon>
+    <Compile Include="DNSUpdaterService.Designer.cs">
+      <DependentUpon>DNSUpdaterService.cs</DependentUpon>
     </Compile>
     <Compile Include="GoDaddy\Helpers\GoDaddyAPICalls.cs" />
     <Compile Include="GoDaddy\Helpers\GoDaddyHttpClient.cs" />

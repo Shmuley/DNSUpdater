@@ -17,7 +17,7 @@ namespace DNSUpdaterService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new DNSUpdater(args)
+                new DNSUpdaterService(args)
             };
             ServiceBase.Run(ServicesToRun);
         }
