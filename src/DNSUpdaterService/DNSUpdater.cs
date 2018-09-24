@@ -1,4 +1,4 @@
-﻿using DNSUpdater;
+﻿using DNSUpdaterService;
 using DNSUpdaterService.Properties;
 using System;
 using System.Collections.Generic;

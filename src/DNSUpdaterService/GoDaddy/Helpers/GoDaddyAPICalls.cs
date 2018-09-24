@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 
-namespace DNSUpdater
+namespace DNSUpdaterService
 {
     public class GoDaddyAPICalls
     {

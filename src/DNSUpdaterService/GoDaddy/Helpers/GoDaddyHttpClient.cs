@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace DNSUpdater
+namespace DNSUpdaterService
 {
     public class GoDaddyHttpClient : HttpClient
     {

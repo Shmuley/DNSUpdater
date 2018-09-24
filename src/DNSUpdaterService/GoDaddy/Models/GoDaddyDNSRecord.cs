@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DNSUpdater
+namespace DNSUpdaterService
 {
     public class GoDaddyDNSRecord
     {

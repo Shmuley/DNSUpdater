@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DNSUpdater
+namespace DNSUpdaterService
 {
     public class GoDaddyDomain
     {
