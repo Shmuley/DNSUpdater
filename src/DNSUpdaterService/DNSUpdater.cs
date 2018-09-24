@@ -12,7 +12,7 @@ namespace DNSUpdaterService
 {
     public partial class DNSUpdater : ServiceBase
     {
-        public DNSUpdater()
+        public DNSUpdater(string[] args)
         {
             InitializeComponent();
 
@@ -21,16 +21,16 @@ namespace DNSUpdaterService
             CanPauseAndContinue = true;
             AutoLog = true;
 
-        }
-
-        protected override void OnStart(string[] args)
-        {
             EventLog.WriteEntry("Service Starting", EventLogEntryType.Information);
 
             // These need to be rewritten into the installer
             GoDaddyAPI.Default.DomainName = args[0];
             GoDaddyAPI.Default.AccessKey = args[1];
             GoDaddyAPI.Default.SecretKey = args[2];
+        }
+
+        protected override void OnStart(string[] args)
+        {
 
             Timer timer = new Timer()
             {

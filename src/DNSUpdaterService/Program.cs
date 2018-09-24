@@ -12,12 +12,12 @@ namespace DNSUpdaterService
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new DNSUpdater()
+                new DNSUpdater(args)
             };
             ServiceBase.Run(ServicesToRun);
         }
