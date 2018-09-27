@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/smhernandez90/DNSUpdater/_apis/build/status/DNS%20Updater%20Service)](https://dev.azure.com/smhernandez90/DNSUpdater/_build/latest?definitionId=1)
+
 # DNS Updater Service
 (This will be) A Small Windows service to updated GoDaddy with you current public IP
 
