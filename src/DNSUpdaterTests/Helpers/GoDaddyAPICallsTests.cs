@@ -16,7 +16,7 @@ namespace DNSUpdater.Tests
             {
                 var expected = new GoDaddyDomain()
                 {
-                    Domain = "000.biz"
+                    Domain = "abadds12ddfs345fgd.com"
                 };
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
@@ -24,7 +24,7 @@ namespace DNSUpdater.Tests
                 client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
 
                 var goDaddyApi = new GoDaddyAPICalls();
-                var actual = goDaddyApi.GetDomain(client, "000.biz").GetAwaiter().GetResult();
+                var actual = goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com").GetAwaiter().GetResult();
 
                 Assert.AreEqual(expected.Domain, actual.Domain);
             }
@@ -45,7 +45,7 @@ namespace DNSUpdater.Tests
                 client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
 
                 var goDaddyApi = new GoDaddyAPICalls();
-                var domain = goDaddyApi.GetDomain(client, "000.biz").GetAwaiter().GetResult();
+                var domain = goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com").GetAwaiter().GetResult();
                 var actual = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
 
                 Assert.AreEqual(expected.name, actual[0].name);
@@ -63,9 +63,9 @@ namespace DNSUpdater.Tests
 
                 var goDaddyApi = new GoDaddyAPICalls();
 
-                var expected = "8.8.8.8";
+                var expected = "Parked";
 
-                var domain = goDaddyApi.GetDomain(client, "000.biz").GetAwaiter().GetResult();
+                var domain = goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com").GetAwaiter().GetResult();
                 var records = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
 
                 goDaddyApi.UpdateDNSRecord(client, domain, records).GetAwaiter();

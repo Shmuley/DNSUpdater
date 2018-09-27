@@ -14,12 +14,21 @@ namespace DNSUpdaterService
         /// </summary>
         static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+
+            if (Environment.UserInteractive)
             {
-                new DNSUpdaterService(args)
-            };
-            ServiceBase.Run(ServicesToRun);
+                DNSUpdaterService service = new DNSUpdaterService();
+                service.TestStartAndStop(args);
+            }
+            else
+            {
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
+                new DNSUpdaterService()
+                };
+                ServiceBase.Run(ServicesToRun);
+            }
         }
     }
 }

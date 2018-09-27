@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="DNSUpdaterService" Language="1033" Version="1.0.0.0" Manufacturer="SmartyPantalones" UpgradeCode="fb86fbb2-a1d0-467b-87c8-0ca97d606093">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Product Id="*" Name="DNS Updater Service" Language="1033" Version="1.0.0.0" Manufacturer="SmartyPantalones" UpgradeCode="fb86fbb2-a1d0-467b-87c8-0ca97d606093">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -9,28 +10,51 @@
 		<Feature Id="ProductFeature" Title="DNS Updater Service" Level="1" Absent="disallow">
 			<ComponentGroupRef Id="ProductComponents" />
 		</Feature>
-  
-      <UI>
-      <Property Id="DefaultUIFont">DlgFont8</Property>
 
-      <Dialog Id="InstallDlg" Width="370" Height="270" Title="[ProductName] [Setup]" NoMinimize="yes">
+
+    <!--<UI>
+      <Dialog Id="InstallDlg" Width="370" Height="270" Title="[ProductName] Setup" NoMinimize="yes">
         <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
           <Text>{\DlgTitleFont}Ready to Install</Text>
         </Control>
-        <Control Id="Install" Type="PushButton" X="304" Y="243" Width="56" Height="17" Default="yes" Text="Install">
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="[BannerBitmap]" />
+        <Control Id ="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>The [Wizard] is ready to begin the installation</Text>
+        </Control>
+        <Control Id="Text" Type="Text" X="25" Y ="70" Width="320" Height="20">
+          <Text>Click Install to begin the installation</Text>
+        </Control>
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id ="Install" Type="PushButton" X="304" Y="243" Width="56" Height="17" Default="yes" Text="[ButtonText_Install]">
           <Publish Event="EndDialog" Value="Return" />
         </Control>
       </Dialog>
 
-      <TextStyle Id="DlgFont8" FaceName="Tahoma" Size="8" />
-      <TextStyle Id="DlgTitleFont" FaceName="Tahoma" Size="8" Bold="yes" />
+      <TextStyle Id="DlgFont8" FaceName="Tahome" Size="8"/>
+      <TextStyle Id="DlgTitleFont" FaceName="Tahome" Size="8" Bold="yes"/>
+
+      <AdminUISequence>
+      </AdminUISequence>
 
       <InstallUISequence>
         <Show Dialog="InstallDlg" After="CostFinalize" />
       </InstallUISequence>
-    </UI>
 
-	</Product>
+    </UI>-->
+    
+    <Property Id="DefaultUIFont">DlgFont8</Property>
+    <Property Id="ButtonText_Install">&amp;Install</Property>
+    <Property Id="BannerBitmap">bannrbmp</Property>
+    <Property Id="Wizard">Setup Wizard</Property>
+
+    <Property Id="AccessKey"></Property>
+    <Property Id="SecretKey"></Property>
+    <Property Id="DomainName"></Property>
+
+    <Binary Id="bannrbmp" SourceFile="Binary\Banner.bmp" />
+
+  </Product>
 
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
@@ -42,20 +66,66 @@
 
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <!--Id, Keypath, and GUID elements are ommited as they are implied-->
+      <!--Id, Keypath, and GUID elements are ommited as they are automatically generated when there is only one File per Component-->
 			 <Component>
          <File Source="..\DNSUpdaterService\bin\Release\DNSUpdaterService.exe"/>
+         <ServiceInstall
+           Id="ServiceInstaller"
+           Type="ownProcess"
+           Name="DNSUpdaterService"
+           DisplayName="DNS Updater Service"
+           Description="Service for updating your public DNS with your public IP"
+           Account="LocalSystem"
+           Start="auto"
+           ErrorControl="normal"
+           />
+         <ServiceControl
+           Id="ServiceUninstall"
+           Name="DNSUpdaterService"
+           Remove="uninstall"
+           Stop="uninstall"
+           Wait="yes"
+           />
 			 </Component> 
 			 <Component>
          <File Source="..\DNSUpdaterService\bin\Release\DNSUpdaterService.exe.config"/>
+         <util:XmlFile 
+           Id="AccessKey" 
+           Action="setValue" 
+           Permanent="yes" 
+           File="[#DNSUpdaterService.exe.config]"
+           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.GoDaddyAPI/setting[\[]@name='AccessKey'[\]]/value"
+           Value="[AccessKey]"/>
+         <util:XmlFile 
+           Id="SecretKey" 
+           Action="setValue" 
+           Permanent="yes" 
+           File="[#DNSUpdaterService.exe.config]"
+           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.GoDaddyAPI/setting[\[]@name='SecretKey'[\]]/value"
+           Value="[SecretKey]"/>
+         <util:XmlFile 
+           Id="DomainName" 
+           Action="setValue" 
+           Permanent="yes" 
+           File="[#DNSUpdaterService.exe.config]"
+           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.GoDaddyAPI/setting[\[]@name='DomainName'[\]]/value"
+           Value="[DomainName]"/>
 			 </Component> 
 			 <Component>
          <File Source="..\DNSUpdaterService\bin\Release\Newtonsoft.Json.dll"/>
-			 </Component> 
+			 </Component>
+			 <Component>
+         <File Source="..\DNSUpdaterService\bin\Release\Newtonsoft.Json.xml"/>
+			 </Component>
 			 <Component>
          <File Source="..\DNSUpdaterService\bin\Release\System.Net.Http.Formatting.dll"/>
 			 </Component> 
+			 <Component>
+         <File Source="..\DNSUpdaterService\bin\Release\System.Net.Http.Formatting.xml"/>
+			 </Component> 
 		</ComponentGroup>
 	</Fragment>
+  
+  
 
 </Wix>

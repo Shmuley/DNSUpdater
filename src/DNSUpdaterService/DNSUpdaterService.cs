@@ -1,5 +1,4 @@
-﻿using DNSUpdaterService;
-using DNSUpdaterService.Properties;
+﻿using DNSUpdaterService.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,25 +11,28 @@ namespace DNSUpdaterService
 {
     public partial class DNSUpdaterService : ServiceBase
     {
-        public DNSUpdaterService(string[] args)
+        public DNSUpdaterService()
         {
             InitializeComponent();
 
-            ServiceName = "DNSUpdater";
+            ServiceName = "DNSUpdaterService";
             CanStop = true;
             CanPauseAndContinue = true;
             AutoLog = true;
 
             EventLog.WriteEntry("Service Starting", EventLogEntryType.Information);
+        }
 
-            // These need to be rewritten into the installer
-            GoDaddyAPI.Default.DomainName = args[0];
-            GoDaddyAPI.Default.AccessKey = args[1];
-            GoDaddyAPI.Default.SecretKey = args[2];
+        internal void TestStartAndStop(string[] args)
+        {
+            OnStart(args);
+            Console.ReadLine();
+            OnStop();
         }
 
         protected override void OnStart(string[] args)
         {
+            EncryptConfigSection("userSettings/DNSUpdaterService.Properties.GoDaddyAPI");
 
             Timer timer = new Timer()
             {
@@ -43,8 +45,6 @@ namespace DNSUpdaterService
 
         private async void OnTimer(object sender, ElapsedEventArgs e)
         {
-            EncryptConfigSection("userSettings/DNSUpdater.Properties.GoDaddyAPI");
-
             GoDaddyDomain domain = null;
             List<GoDaddyDNSRecord> record = null;
 
@@ -55,7 +55,7 @@ namespace DNSUpdaterService
                 try
                 {
                     domain = await goDaddyAPI.GetDomain(client, GoDaddyAPI.Default.DomainName);
-                    Console.WriteLine($"Domain Retrieved: {domain.Domain}");
+                    EventLog.WriteEntry($"Domain Retrieved: {domain.Domain}");
                 }
                 catch (HttpRequestException ex)
                 {
@@ -67,7 +67,11 @@ namespace DNSUpdaterService
                     record = await goDaddyAPI.GetDomainRecords(client, domain);
                     foreach (var rec in record)
                     {
-                        EventLog.WriteEntry($"Record Retrieved: Type:{rec.type} Name:{rec.name} Data:{rec.data} TTL:{rec.ttl}");
+                        EventLog.WriteEntry($"Record Retrieved: " +
+                            $"Type: {rec.type} " +
+                            $"Name: {rec.name} " +
+                            $"Data: {rec.data} " +
+                            $"TTL: {rec.ttl}");
                     }
                 }
                 catch (HttpRequestException ex)
