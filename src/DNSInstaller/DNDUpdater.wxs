@@ -52,7 +52,7 @@
     <Property Id="SecretKey"></Property>
     <Property Id="DomainName"></Property>
 
-    <Binary Id="bannrbmp" SourceFile="Binary\Banner.bmp" />
+    <!--<Binary Id="bannrbmp" SourceFile="Binary\Banner.bmp" />-->
 
   </Product>
 
@@ -68,7 +68,7 @@
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <!--Id, Keypath, and GUID elements are ommited as they are automatically generated when there is only one File per Component-->
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\Release\DNSUpdaterService.exe"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe"/>
          <ServiceInstall
            Id="ServiceInstaller"
            Type="ownProcess"
@@ -88,7 +88,7 @@
            />
 			 </Component> 
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\Release\DNSUpdaterService.exe.config"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe.config"/>
          <util:XmlFile 
            Id="AccessKey" 
            Action="setValue" 
@@ -112,16 +112,16 @@
            Value="[DomainName]"/>
 			 </Component> 
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\Release\Newtonsoft.Json.dll"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\Newtonsoft.Json.dll"/>
 			 </Component>
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\Release\Newtonsoft.Json.xml"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\Newtonsoft.Json.xml"/>
 			 </Component>
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\Release\System.Net.Http.Formatting.dll"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\System.Net.Http.Formatting.dll"/>
 			 </Component> 
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\Release\System.Net.Http.Formatting.xml"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\System.Net.Http.Formatting.xml"/>
 			 </Component> 
 		</ComponentGroup>
 	</Fragment>

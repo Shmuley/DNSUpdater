@@ -1,4 +1,4 @@
-﻿using DNSUpdaterService.Properties;
+﻿using DNSUpdater.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,8 +6,10 @@ using System.Net.Http;
 using System.ServiceProcess;
 using System.Timers;
 using System.Configuration;
+using System.Threading.Tasks;
+using DNSUpdaterService.Base;
 
-namespace DNSUpdaterService
+namespace DNSUpdater
 {
     public partial class DNSUpdaterService : ServiceBase
     {
@@ -36,7 +38,7 @@ namespace DNSUpdaterService
 
             Timer timer = new Timer()
             {
-                Interval = 300000
+                Interval = 10000
             };
             timer.Elapsed += new ElapsedEventHandler(OnTimer);
             timer.Start();
@@ -48,46 +50,63 @@ namespace DNSUpdaterService
             GoDaddyDomain domain = null;
             List<GoDaddyDNSRecord> record = null;
 
-            var goDaddyAPI = new GoDaddyAPICalls();
+            var apiCaller = new GoDaddyAPICalls();
 
             using (var client = new GoDaddyHttpClient())
             {
                 try
                 {
-                    domain = await goDaddyAPI.GetDomain(client, GoDaddyAPI.Default.DomainName);
-                    EventLog.WriteEntry($"Domain Retrieved: {domain.Domain}");
+                    var response = await apiCaller.GetDomain(client, GoDaddyAPI.Default.DomainName);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        domain = await response.Content.ReadAsAsync<GoDaddyDomain>();
+                        EventLog.WriteEntry($"Domain Retrieved: {domain.Domain}");
+                    }
+                    else
+                    {
+                        EventLog.WriteEntry(await response.Content.ReadAsStringAsync(), EventLogEntryType.Error);
+                    }
+
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
                 }
 
-                try
+                if (domain != null)
                 {
-                    record = await goDaddyAPI.GetDomainRecords(client, domain);
-                    foreach (var rec in record)
+                    try
                     {
-                        EventLog.WriteEntry($"Record Retrieved: " +
-                            $"Type: {rec.type} " +
-                            $"Name: {rec.name} " +
-                            $"Data: {rec.data} " +
-                            $"TTL: {rec.ttl}");
+                        record = await apiCaller.GetDomainRecords(client, domain);
+                        foreach (var rec in record)
+                        {
+                            EventLog.WriteEntry($"Record Retrieved: " +
+                                $"Type: {rec.type} " +
+                                $"Name: {rec.name} " +
+                                $"Data: {rec.data} " +
+                                $"TTL: {rec.ttl}");
+                        }
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
                     }
                 }
-                catch (HttpRequestException ex)
-                {
-                    EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
-                }
 
-                //try
-                //{
-                //    await goDaddyAPI.UpdateDNSRecord(client, domain, record);
-                //    EventLog.WriteEntry("DNS Updated Succsessfully", EventLogEntryType.Information);
-                //}
-                //catch (HttpRequestException ex)
-                //{
-                //    EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
-                //}
+                if (record != null)
+                {
+                    try
+                    {
+                        await apiCaller.UpdateDNSRecord(client, domain, record, await GetPublicIP());
+                        EventLog.WriteEntry("DNS Updated Succsessfully", EventLogEntryType.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
+                    }
+
+                }
             }
 
         }
@@ -114,6 +133,25 @@ namespace DNSUpdaterService
                 }
             }
 
+        }
+
+        public static async Task<string> GetPublicIP()
+        {
+            using (var client = new HttpClient())
+            {
+                var uri = new Uri("https://api.ipify.org");
+                var response = await client.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var ip = await response.Content.ReadAsStringAsync();
+                    return ip;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
     }

@@ -1,4 +1,4 @@
-﻿namespace DNSUpdaterService
+﻿namespace DNSUpdater
 {
     partial class DNSUpdaterService
     {

@@ -1,8 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DNSUpdaterService;
+using DNSUpdater;
 using System;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Threading.Tasks;
 
 namespace DNSUpdater.Tests
 {
@@ -10,7 +12,7 @@ namespace DNSUpdater.Tests
     public class GoDaddyAPICallsTests
     {
         [TestMethod()]
-        public void GetDomainTest()
+        public async Task GetDomainTest()
         {
             using (var client = new GoDaddyHttpClient())
             {
@@ -24,14 +26,15 @@ namespace DNSUpdater.Tests
                 client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
 
                 var goDaddyApi = new GoDaddyAPICalls();
-                var actual = goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com").GetAwaiter().GetResult();
+                var response = await goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com");
+                var actual = await response.Content.ReadAsAsync<GoDaddyDomain>();
 
                 Assert.AreEqual(expected.Domain, actual.Domain);
             }
         }
 
         [TestMethod()]
-        public void GetDomainRecordsTest()
+        public async Task GetDomainRecordsTest()
         {
             using(var client = new GoDaddyHttpClient())
             {
@@ -45,7 +48,8 @@ namespace DNSUpdater.Tests
                 client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
 
                 var goDaddyApi = new GoDaddyAPICalls();
-                var domain = goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com").GetAwaiter().GetResult();
+                var response = await goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com");
+                var domain = await response.Content.ReadAsAsync<GoDaddyDomain>();
                 var actual = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
 
                 Assert.AreEqual(expected.name, actual[0].name);
@@ -53,7 +57,7 @@ namespace DNSUpdater.Tests
         }
 
         [TestMethod()]
-        public void UpdateDNSRecordTest()
+        public async Task UpdateDNSRecordTest()
         {
             using (var client = new GoDaddyHttpClient())
             {
@@ -65,32 +69,16 @@ namespace DNSUpdater.Tests
 
                 var expected = "Parked";
 
-                var domain = goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com").GetAwaiter().GetResult();
+                var response = await goDaddyApi.GetDomain(client, "abadds12ddfs345fgd.com");
+                var domain = await response.Content.ReadAsAsync<GoDaddyDomain>();
                 var records = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
 
-                goDaddyApi.UpdateDNSRecord(client, domain, records).GetAwaiter();
+                goDaddyApi.UpdateDNSRecord(client, domain, records, expected).GetAwaiter();
 
                 var actual = goDaddyApi.GetDomainRecords(client, domain).GetAwaiter().GetResult();
 
                 Assert.AreEqual(expected, actual[0].data);
             }
-        }
-
-        [TestMethod()]
-        public void GetPublicIPTest()
-        {
-            string expected = null;
-
-            using(var client = new HttpClient())
-            {
-               var response = client.GetAsync("https://api.ipify.org").GetAwaiter().GetResult();
-               expected = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            }
-            var goDaddyApi = new GoDaddyAPICalls();
-            var actual = goDaddyApi.GetPublicIP().GetAwaiter().GetResult();
-
-            Assert.AreEqual(expected, actual);
-
         }
     }
 }

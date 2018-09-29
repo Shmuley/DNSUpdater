@@ -1,11 +1,11 @@
-﻿using DNSUpdaterService.Properties;
+﻿using DNSUpdater.Properties;
 using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace DNSUpdaterService
+namespace DNSUpdater
 {
     public class GoDaddyHttpClient : HttpClient
     {

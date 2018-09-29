@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\ApiCaller.cs" />
     <Compile Include="DNSUpdaterService.cs">
       <SubType>Component</SubType>
     </Compile>
