@@ -68,7 +68,7 @@
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <!--Id, Keypath, and GUID elements are ommited as they are automatically generated when there is only one File per Component-->
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdater.exe"/>
          <ServiceInstall
            Id="ServiceInstaller"
            Type="ownProcess"
@@ -88,7 +88,7 @@
            />
 			 </Component> 
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe.config"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdater.exe.config"/>
          <util:XmlFile 
            Id="AccessKey" 
            Action="setValue" 

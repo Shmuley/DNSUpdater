@@ -1,4 +1,5 @@
-﻿using DNSUpdater.Properties;
+﻿using DNSUpdater.Base;
+using DNSUpdater.Properties;
 using System;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -7,23 +8,23 @@ using System.Net.Http.Headers;
 
 namespace DNSUpdater
 {
-    public class GoDaddyHttpClient : HttpClient
+    public class GoDaddyHttpClient : DusHttpClient
     {
-        public AuthenticationHeaderValue SsoKey { get; set; }
-        public Uri Uri {get; set;}
-        public MediaTypeWithQualityHeaderValue HeaderValue { get; set; }
-
         public GoDaddyHttpClient()
         {
             Uri = new Uri(ConfigurationManager.AppSettings["URL"]);
             HeaderValue = new MediaTypeWithQualityHeaderValue(ConfigurationManager.AppSettings["RequestHeaders"]);
             SsoKey = new AuthenticationHeaderValue(
-                "sso-key", $"{GoDaddyAPI.Default.AccessKey}:{GoDaddyAPI.Default.SecretKey}");
+                "sso-key", $"{DusApi.Default.AccessKey}:{DusApi.Default.SecretKey}");
 
             BaseAddress = Uri;
             DefaultRequestHeaders.Clear();
             DefaultRequestHeaders.Accept.Add(HeaderValue);
             DefaultRequestHeaders.Authorization = SsoKey;
+
+            DomainApiCall = $"domains/{DusApi.Default.DomainName}";
+            DomainRecordApiCall = $"domains/{DusApi.Default.DomainName}/records/A/@";
+            DomainUpdateDnsApiCall = $"domains/{DusApi.Default.DomainName}/records/A/@";
         }
 
         public override bool Equals(object obj)
@@ -33,8 +34,7 @@ namespace DNSUpdater
                 return false;
             }
 
-            GoDaddyHttpClient compare = obj as GoDaddyHttpClient;
-            if (compare != null &&
+            if (obj is GoDaddyHttpClient compare &&
                 Uri.OriginalString == compare.Uri.OriginalString &&
                 HeaderValue.MediaType == compare.HeaderValue.MediaType &&
                 SsoKey.Parameter == compare.SsoKey.Parameter)

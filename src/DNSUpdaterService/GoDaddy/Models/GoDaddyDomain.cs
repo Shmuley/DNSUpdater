@@ -1,8 +1,9 @@
-﻿using System;
+﻿using DNSUpdater.Base;
+using System;
 
 namespace DNSUpdater
 {
-    public class GoDaddyDomain
+    public class GoDaddyDomain : IDnsDomain
     {
         public int DomainId { get; set; }
         public string Domain { get; set; }

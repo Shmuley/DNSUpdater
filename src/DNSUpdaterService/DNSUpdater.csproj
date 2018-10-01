@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6216C91A-263C-444A-BC63-01735030E1A4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>DNSUpdaterService</RootNamespace>
-    <AssemblyName>DNSUpdaterService</AssemblyName>
+    <RootNamespace>DNSUpdater</RootNamespace>
+    <AssemblyName>DNSUpdater</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -73,31 +73,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\ApiCaller.cs" />
+    <Compile Include="Base\Interfaces\IApiCaller.cs" />
+    <Compile Include="Base\Interfaces\IDnsDomain.cs" />
+    <Compile Include="Base\Interfaces\IDnsRecord.cs" />
     <Compile Include="DNSUpdaterService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DNSUpdaterService.Designer.cs">
       <DependentUpon>DNSUpdaterService.cs</DependentUpon>
     </Compile>
-    <Compile Include="GoDaddy\Helpers\GoDaddyAPICalls.cs" />
+    <Compile Include="Base\Classes\ApiCaller.cs" />
+    <Compile Include="GoDaddy\Helpers\GoDaddyAPICaller.cs" />
     <Compile Include="GoDaddy\Helpers\GoDaddyHttpClient.cs" />
-    <Compile Include="GoDaddy\Models\GoDaddyDNSRecord.cs" />
+    <Compile Include="Base\Classes\DusHttpClient.cs" />
+    <Compile Include="GoDaddy\Models\GoDaddyDnsRecord.cs" />
     <Compile Include="GoDaddy\Models\GoDaddyDomain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\GoDaddyAPI.Designer.cs">
+    <Compile Include="Properties\DusApi.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>GoDaddyAPI.settings</DependentUpon>
+      <DependentUpon>DusApi.settings</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Properties\GoDaddyAPI.settings">
+    <None Include="Properties\DusApi.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>GoDaddyAPI.Designer.cs</LastGenOutput>
+      <LastGenOutput>DusApi.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

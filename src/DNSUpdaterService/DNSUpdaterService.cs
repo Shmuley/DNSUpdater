@@ -1,13 +1,10 @@
-﻿using DNSUpdater.Properties;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.ServiceProcess;
 using System.Timers;
 using System.Configuration;
 using System.Threading.Tasks;
-using DNSUpdaterService.Base;
 
 namespace DNSUpdater
 {
@@ -34,7 +31,7 @@ namespace DNSUpdater
 
         protected override void OnStart(string[] args)
         {
-            EncryptConfigSection("userSettings/DNSUpdaterService.Properties.GoDaddyAPI");
+            EncryptConfigSection("userSettings/DNSUpdaterService.Properties.DusApi");
 
             Timer timer = new Timer()
             {
@@ -45,68 +42,12 @@ namespace DNSUpdater
 
         }
 
-        private async void OnTimer(object sender, ElapsedEventArgs e)
+        private void OnTimer(object sender, ElapsedEventArgs e)
         {
-            GoDaddyDomain domain = null;
-            List<GoDaddyDNSRecord> record = null;
-
-            var apiCaller = new GoDaddyAPICalls();
-
             using (var client = new GoDaddyHttpClient())
             {
-                try
-                {
-                    var response = await apiCaller.GetDomain(client, GoDaddyAPI.Default.DomainName);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        domain = await response.Content.ReadAsAsync<GoDaddyDomain>();
-                        EventLog.WriteEntry($"Domain Retrieved: {domain.Domain}");
-                    }
-                    else
-                    {
-                        EventLog.WriteEntry(await response.Content.ReadAsStringAsync(), EventLogEntryType.Error);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
-                }
-
-                if (domain != null)
-                {
-                    try
-                    {
-                        record = await apiCaller.GetDomainRecords(client, domain);
-                        foreach (var rec in record)
-                        {
-                            EventLog.WriteEntry($"Record Retrieved: " +
-                                $"Type: {rec.type} " +
-                                $"Name: {rec.name} " +
-                                $"Data: {rec.data} " +
-                                $"TTL: {rec.ttl}");
-                        }
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
-                    }
-                }
-
-                if (record != null)
-                {
-                    try
-                    {
-                        await apiCaller.UpdateDNSRecord(client, domain, record, await GetPublicIP());
-                        EventLog.WriteEntry("DNS Updated Succsessfully", EventLogEntryType.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
-                    }
-
-                }
+                var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>();
+                caller.UpdateProvider(client, EventLog);
             }
 
         }
@@ -153,6 +94,5 @@ namespace DNSUpdater
                 }
             }
         }
-
     }
 }

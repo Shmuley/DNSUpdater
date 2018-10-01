@@ -13,13 +13,25 @@ namespace DNSUpdater.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.8.0.0")]
-    internal sealed partial class GoDaddyAPI : global::System.Configuration.ApplicationSettingsBase {
+    internal sealed partial class DusApi : global::System.Configuration.ApplicationSettingsBase {
         
-        private static GoDaddyAPI defaultInstance = ((GoDaddyAPI)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new GoDaddyAPI())));
+        private static DusApi defaultInstance = ((DusApi)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new DusApi())));
         
-        public static GoDaddyAPI Default {
+        public static DusApi Default {
             get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DomainName {
+            get {
+                return ((string)(this["DomainName"]));
+            }
+            set {
+                this["DomainName"] = value;
             }
         }
         
@@ -44,18 +56,6 @@ namespace DNSUpdater.Properties {
             }
             set {
                 this["SecretKey"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DomainName {
-            get {
-                return ((string)(this["DomainName"]));
-            }
-            set {
-                this["DomainName"] = value;
             }
         }
     }
