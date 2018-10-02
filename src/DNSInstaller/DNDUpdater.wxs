@@ -59,7 +59,7 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="DNSUpdaterService" />
+				<Directory Id="INSTALLFOLDER" Name="DNS Updater" />
 			</Directory>
 		</Directory>
 	</Fragment>
@@ -68,7 +68,7 @@
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <!--Id, Keypath, and GUID elements are ommited as they are automatically generated when there is only one File per Component-->
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdater.exe"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe"/>
          <ServiceInstall
            Id="ServiceInstaller"
            Type="ownProcess"
@@ -88,27 +88,27 @@
            />
 			 </Component> 
 			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdater.exe.config"/>
+         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe.config"/>
          <util:XmlFile 
            Id="AccessKey" 
            Action="setValue" 
            Permanent="yes" 
            File="[#DNSUpdaterService.exe.config]"
-           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.GoDaddyAPI/setting[\[]@name='AccessKey'[\]]/value"
+           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.DusApi/setting[\[]@name='AccessKey'[\]]/value"
            Value="[AccessKey]"/>
          <util:XmlFile 
            Id="SecretKey" 
            Action="setValue" 
            Permanent="yes" 
            File="[#DNSUpdaterService.exe.config]"
-           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.GoDaddyAPI/setting[\[]@name='SecretKey'[\]]/value"
+           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.DusApi/setting[\[]@name='SecretKey'[\]]/value"
            Value="[SecretKey]"/>
          <util:XmlFile 
            Id="DomainName" 
            Action="setValue" 
            Permanent="yes" 
            File="[#DNSUpdaterService.exe.config]"
-           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.GoDaddyAPI/setting[\[]@name='DomainName'[\]]/value"
+           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.DusApi/setting[\[]@name='DomainName'[\]]/value"
            Value="[DomainName]"/>
 			 </Component> 
 			 <Component>

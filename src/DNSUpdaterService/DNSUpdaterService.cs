@@ -5,6 +5,7 @@ using System.ServiceProcess;
 using System.Timers;
 using System.Configuration;
 using System.Threading.Tasks;
+using DNSUpdaterService.Properties;
 
 namespace DNSUpdater
 {
@@ -31,6 +32,12 @@ namespace DNSUpdater
 
         protected override void OnStart(string[] args)
         {
+            if (DusApi.Default.DomainName == null || DusApi.Default.AccessKey == null || DusApi.Default.SecretKey == null)
+            {
+                throw new NullReferenceException("A domain name, access key, or secret key has " +
+                    "not been specified in the application config file. Please specify these settings and try again.");
+            }
+
             EncryptConfigSection("userSettings/DNSUpdaterService.Properties.DusApi");
 
             Timer timer = new Timer()

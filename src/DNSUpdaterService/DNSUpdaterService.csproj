@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6216C91A-263C-444A-BC63-01735030E1A4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>DNSUpdater</RootNamespace>
-    <AssemblyName>DNSUpdater</AssemblyName>
+    <RootNamespace>DNSUpdaterService</RootNamespace>
+    <AssemblyName>DNSUpdaterService</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

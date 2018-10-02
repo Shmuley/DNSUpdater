@@ -1,9 +1,7 @@
 ﻿using DNSUpdater.Base;
-using DNSUpdater.Properties;
+using DNSUpdaterService.Properties;
 using System;
-using System.Collections.Specialized;
 using System.Configuration;
-using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace DNSUpdater
