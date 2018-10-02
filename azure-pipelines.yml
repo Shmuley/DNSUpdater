@@ -33,7 +33,7 @@ steps:
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
 
-    Contents: 'DNSInstaller\bin\$(BuildConfiguration)\*.msi'
+    Contents: '**\bin\$(BuildConfiguration)\*.msi'
 
     TargetFolder: '$(build.artifactstagingdirectory)'
 
