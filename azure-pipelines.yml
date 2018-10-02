@@ -28,3 +28,17 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: CopyFiles@3
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+
+    Contents: 'DNSInstaller\bin\$(BuildConfiguration)\*.msi'
+
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@4
+  displayName: 'Publish Artifact: Installer'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
