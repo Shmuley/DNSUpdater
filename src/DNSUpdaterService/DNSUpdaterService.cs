@@ -42,7 +42,7 @@ namespace DNSUpdater
 
             Timer timer = new Timer()
             {
-                Interval = 10000
+                Interval = 300000
             };
             timer.Elapsed += new ElapsedEventHandler(OnTimer);
             timer.Start();
