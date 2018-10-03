@@ -8,8 +8,7 @@ You should be able to build this using VS 2017 and [WiX v3.11.1](https://github.
 
 ## Install
 Once the service is installed:
-1. Run the installer
-2. Navigate to C:\Program Files (x86)\DNS Updater
-3. Edit DnsUpdaterService.exe.config and add your information to the "DNSUpdaterService.Properties.DusApi" section
-  a. 
-4. Start the service
+1. Navigate to C:\Program Files (x86)\DNS Updater
+2. Edit DnsUpdaterService.exe.config and add your information to the "DNSUpdaterService.Properties.DusApi" section
+![Image of App.config](https://github.com/SmartyPantalones/DNSUpdater/blob/master/.github/images/Code_2018-10-03_10-38-38.png)
+3. Start the service
