@@ -7,7 +7,7 @@ namespace DNSUpdater.Base
 {
     interface IApiCaller <TDomain, TRecord>
     {
-        void UpdateProvider(DusHttpClient client, EventLog log);
+        Task UpdateProvider(DusHttpClient client, EventLog log);
 
         Task<HttpResponseMessage> GetDomain(DusHttpClient client, string domainCall);
 

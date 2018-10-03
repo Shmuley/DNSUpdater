@@ -49,12 +49,12 @@ namespace DNSUpdater
 
         }
 
-        private void OnTimer(object sender, ElapsedEventArgs e)
+        private async void OnTimer(object sender, ElapsedEventArgs e)
         {
             using (var client = new GoDaddyHttpClient())
             {
                 var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>();
-                caller.UpdateProvider(client, EventLog);
+                await caller.UpdateProvider(client, EventLog);
             }
 
         }
