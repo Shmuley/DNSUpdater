@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-	<Product Id="*" Name="DNS Updater Service" Language="1033" Version="1.0.0.0" Manufacturer="SmartyPantalones" UpgradeCode="fb86fbb2-a1d0-467b-87c8-0ca97d606093">
+	<Product Id="*" Name="DNS Updater Service" Language="1033" Version="!(bind.fileVersion.DNSUpdaterService.exe)" Manufacturer="SmartyPantalones" UpgradeCode="fb86fbb2-a1d0-467b-87c8-0ca97d606093">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
