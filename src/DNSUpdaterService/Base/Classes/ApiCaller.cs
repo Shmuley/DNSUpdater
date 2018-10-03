@@ -32,7 +32,7 @@ namespace DNSUpdater
 
                         var ip = await DNSUpdaterService.GetPublicIP();
 
-                        if (record[0].data != ip)
+                        if (record[0].data == ip)
                         {
                             log.WriteEntry("DNS up to date, no changes made", EventLogEntryType.Information);
                         }
