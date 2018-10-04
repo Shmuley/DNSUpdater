@@ -1,131 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-	<Product Id="*" Name="DNS Updater Service" Language="1033" Version="!(bind.fileVersion.DNSUpdaterService.exe)" Manufacturer="SmartyPantalones" UpgradeCode="fb86fbb2-a1d0-467b-87c8-0ca97d606093">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
-
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate EmbedCab="yes" />
-    
-		<Feature Id="ProductFeature" Title="DNS Updater Service" Level="1" Absent="disallow">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-
-
-    <!--<UI>
-      <Dialog Id="InstallDlg" Width="370" Height="270" Title="[ProductName] Setup" NoMinimize="yes">
-        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
-          <Text>{\DlgTitleFont}Ready to Install</Text>
-        </Control>
-        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="[BannerBitmap]" />
-        <Control Id ="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
-          <Text>The [Wizard] is ready to begin the installation</Text>
-        </Control>
-        <Control Id="Text" Type="Text" X="25" Y ="70" Width="320" Height="20">
-          <Text>Click Install to begin the installation</Text>
-        </Control>
-        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
-        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
-        <Control Id ="Install" Type="PushButton" X="304" Y="243" Width="56" Height="17" Default="yes" Text="[ButtonText_Install]">
-          <Publish Event="EndDialog" Value="Return" />
-        </Control>
-      </Dialog>
-
-      <TextStyle Id="DlgFont8" FaceName="Tahome" Size="8"/>
-      <TextStyle Id="DlgTitleFont" FaceName="Tahome" Size="8" Bold="yes"/>
-
-      <AdminUISequence>
-      </AdminUISequence>
-
-      <InstallUISequence>
-        <Show Dialog="InstallDlg" After="CostFinalize" />
-      </InstallUISequence>
-
-    </UI>-->
-    
-    <Property Id="DefaultUIFont">DlgFont8</Property>
-    <Property Id="ButtonText_Install">&amp;Install</Property>
-    <Property Id="BannerBitmap">bannrbmp</Property>
-    <Property Id="Wizard">Setup Wizard</Property>
-
-    <Property Id="AccessKey"></Property>
-    <Property Id="SecretKey"></Property>
-    <Property Id="DomainName"></Property>
-
-    <!--<Binary Id="bannrbmp" SourceFile="Binary\Banner.bmp" />-->
-
-  </Product>
-
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="DNS Updater" />
-			</Directory>
-		</Directory>
-	</Fragment>
-
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <!--Id, Keypath, and GUID elements are ommited as they are automatically generated when there is only one File per Component-->
-			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe"/>
-         <ServiceInstall
-           Id="ServiceInstaller"
-           Type="ownProcess"
-           Name="DNSUpdaterService"
-           DisplayName="DNS Updater Service"
-           Description="Service for updating your public DNS with your public IP"
-           Account="LocalSystem"
-           Start="auto"
-           ErrorControl="normal"
-           />
-         <ServiceControl
-           Id="ServiceUninstall"
-           Name="DNSUpdaterService"
-           Remove="uninstall"
-           Stop="uninstall"
-           Wait="yes"
-           />
-			 </Component> 
-			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\DNSUpdaterService.exe.config"/>
-         <util:XmlFile 
-           Id="AccessKey" 
-           Action="setValue" 
-           Permanent="yes" 
-           File="[#DNSUpdaterService.exe.config]"
-           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.DusApi/setting[\[]@name='AccessKey'[\]]/value"
-           Value="[AccessKey]"/>
-         <util:XmlFile 
-           Id="SecretKey" 
-           Action="setValue" 
-           Permanent="yes" 
-           File="[#DNSUpdaterService.exe.config]"
-           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.DusApi/setting[\[]@name='SecretKey'[\]]/value"
-           Value="[SecretKey]"/>
-         <util:XmlFile 
-           Id="DomainName" 
-           Action="setValue" 
-           Permanent="yes" 
-           File="[#DNSUpdaterService.exe.config]"
-           ElementPath="/configuration/userSettings/DNSUpdaterService.Properties.DusApi/setting[\[]@name='DomainName'[\]]/value"
-           Value="[DomainName]"/>
-			 </Component> 
-			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\Newtonsoft.Json.dll"/>
-			 </Component>
-			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\Newtonsoft.Json.xml"/>
-			 </Component>
-			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\System.Net.Http.Formatting.dll"/>
-			 </Component> 
-			 <Component>
-         <File Source="..\DNSUpdaterService\bin\$(var.Configuration)\System.Net.Http.Formatting.xml"/>
-			 </Component> 
-		</ComponentGroup>
-	</Fragment>
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   
+  <!-- Define which product code to use depending on what platform is used to build-->
+  <?if $(var.Platform)=x64?>
+  <?define ProductCode = "{9DA856C8-2CF7-44D1-86FD-25FFE809411A}"?>
+  <?else?>
+  <?define ProductCode = "{20DD5346-4F15-4958-9682-E8D3C6793966}"?>
+  <?endif?>
   
+  <?define UpgradeCode = "{5077977F-19D6-42F0-9C34-2C670931CE4B}"?>
 
+    <Product Id="$(var.ProductCode)" 
+             Name="!(loc.ProductName_$(var.Platform))"
+             Language="!(loc.Language)" 
+             Version="!(bind.fileVersion.DNSUpdaterService.exe)" 
+             Manufacturer="!(loc.Manufacturer)" 
+             UpgradeCode="$(var.UpgradeCode)">
+      
+      <Package InstallerVersion="200" 
+                  Compressed="yes" 
+                  InstallScope="perMachine"
+                  Platform="$(var.Platform)"
+                  Manufacturer="!(loc.Manufacturer)"
+                  Description="!(loc.Description)"
+                  Keywords="!(loc.Keywords)"
+                  Comments="!(loc.Comments)
+                  "/>
+      
+      <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+      
+      <MediaTemplate EmbedCab="yes" />
+      
+      <!--Defining what icon to use for the installer and the application-->
+      <Icon Id="icon.ico" SourceFile="$(var.DNSUpdaterService.ProjectDir)\app.ico"/>
+      <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+      <Property Id="ARPURLINFOABOUT" Value="https://github.com/SmartyPantalones/DNSUpdater" />
+
+      <!--Create a basic UI-->
+      <UIRef Id="WixUI_Minimal"/>
+      
+      <!--License for the installer-->
+      <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\Assets\License.rtf"/>
+      
+      <Feature Id="ProductFeature" Title="DNS Updater Service" Level="1" Absent="disallow">
+          <ComponentGroupRef Id="ProductComponents" />
+      </Feature>
+           
+      <Property Id="AccessKey"></Property>
+      <Property Id="SecretKey"></Property>
+      <Property Id="DomainName"></Property>
+      
+    </Product>
+  
 </Wix>

@@ -3,13 +3,16 @@
   <Profiles />
   <Settings>
     <Setting Name="DomainName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">
+        </Value>
     </Setting>
     <Setting Name="AccessKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">
+        </Value>
     </Setting>
     <Setting Name="SecretKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">
+        </Value>
     </Setting>
   </Settings>
 </SettingsFile>

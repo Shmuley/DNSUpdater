@@ -9,10 +9,10 @@ namespace DNSUpdater.Base
     {
         Task UpdateProvider(DusHttpClient client, EventLog log);
 
-        Task<HttpResponseMessage> GetDomain(DusHttpClient client, string domainCall);
+        Task<HttpResponseMessage> GetDomain(DusHttpClient client);
 
-        Task<HttpResponseMessage> GetDomainRecords(DusHttpClient client, string recordCall);
+        Task<HttpResponseMessage> GetDomainRecords(DusHttpClient client);
 
-        Task<HttpResponseMessage> UpdateDnsRecord(DusHttpClient client, TDomain domain, IList<TRecord> record, string ip, string updateCall);
+        Task<HttpResponseMessage> UpdateDnsRecord(DusHttpClient client, TDomain domain, IList<TRecord> record, string ip);
     }
 }

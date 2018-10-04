@@ -10,8 +10,8 @@ namespace DNSUpdater
     {
         public GoDaddyHttpClient()
         {
-            Uri = new Uri(ConfigurationManager.AppSettings["URL"]);
-            HeaderValue = new MediaTypeWithQualityHeaderValue(ConfigurationManager.AppSettings["RequestHeaders"]);
+            Uri = new Uri(ConfigurationManager.AppSettings["GDURL"]);
+            HeaderValue = new MediaTypeWithQualityHeaderValue(ConfigurationManager.AppSettings["GDRequestHeaders"]);
             SsoKey = new AuthenticationHeaderValue(
                 "sso-key", $"{DusApi.Default.AccessKey}:{DusApi.Default.SecretKey}");
 
@@ -22,7 +22,6 @@ namespace DNSUpdater
 
             DomainApiCall = $"domains/{DusApi.Default.DomainName}";
             DomainRecordApiCall = $"domains/{DusApi.Default.DomainName}/records/A/@";
-            DomainUpdateDnsApiCall = $"domains/{DusApi.Default.DomainName}/records/A/@";
         }
 
         public override bool Equals(object obj)

@@ -27,12 +27,12 @@ namespace DNSUpdater.Tests
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                     "sso-key", "UzQxLikm_46KxDFnbjN7cQjmw6wocia:46L26ydpkwMaKZV6uVdDWe");
                 client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
+                client.DomainApiCall = domainApiCall;
 
-                var goDaddyApi = new GoDaddyAPICaller();
-                var response = await goDaddyApi.GetDomain(client, domainApiCall);
-                var actual = await response.Content.ReadAsAsync<GoDaddyDomain>();
+                var goDaddyApi = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>();
+                var response = await goDaddyApi.GetDomain(client);
 
-                Assert.AreEqual(expected.Domain, actual.Domain);
+                Assert.IsTrue(response.IsSuccessStatusCode);
             }
         }
 
@@ -41,8 +41,6 @@ namespace DNSUpdater.Tests
         {
             using(var client = new GoDaddyHttpClient())
             {
-                List<GoDaddyDnsRecord> actual = null;
-
                 var expected = new GoDaddyDnsRecord()
                 {
                     name = "@"
@@ -51,22 +49,16 @@ namespace DNSUpdater.Tests
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                     "sso-key", "UzQxLikm_46KxDFnbjN7cQjmw6wocia:46L26ydpkwMaKZV6uVdDWe");
                 client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
+                client.DomainApiCall = domainApiCall;
+                client.DomainRecordApiCall = domainRecordApiCall;
 
-                var goDaddyApi = new GoDaddyAPICaller();
-                var response = await goDaddyApi.GetDomain(client, domainApiCall);
+                var goDaddyApi = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>();
+                var response = await goDaddyApi.GetDomain(client);
                 var domain = await response.Content.ReadAsAsync<GoDaddyDomain>();
-                var recordsResponse = await goDaddyApi.GetDomainRecords(client, domainRecordApiCall);
+                var recordsResponse = await goDaddyApi.GetDomainRecords(client);
 
-                if (recordsResponse.IsSuccessStatusCode)
-                {
-                    actual = await recordsResponse.Content.ReadAsAsync<List<GoDaddyDnsRecord>>();
-                    Assert.AreEqual(expected.name, actual[0].name);
-                }
-                else
-                {
-                    var responseString = await recordsResponse.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseString);
-                }
+                Assert.IsTrue(recordsResponse.IsSuccessStatusCode);
+
             }
         }
 
@@ -78,18 +70,18 @@ namespace DNSUpdater.Tests
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                 "sso-key", "UzQxLikm_46KxDFnbjN7cQjmw6wocia:46L26ydpkwMaKZV6uVdDWe");
                 client.BaseAddress = new Uri("https://api.ote-godaddy.com/v1/");
+                client.DomainApiCall = domainApiCall;
+                client.DomainRecordApiCall = domainRecordApiCall;
 
-                var goDaddyApi = new GoDaddyAPICaller();
+                var goDaddyApi = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>();
 
-                var expected = "Parked";
+                var expected = await DNSUpdaterService.GetPublicIP();
 
-                var response = await goDaddyApi.GetDomain(client, domainApiCall);
+                var response = await goDaddyApi.GetDomain(client);
                 var domain = await response.Content.ReadAsAsync<GoDaddyDomain>();
-                var recordsResponse = await goDaddyApi.GetDomainRecords(client, domainRecordApiCall);
+                var recordsResponse = await goDaddyApi.GetDomainRecords(client);
                 var records = await recordsResponse.Content.ReadAsAsync<IList<GoDaddyDnsRecord>>();
-                var updateResponse = await goDaddyApi.UpdateDnsRecord(client, domain, records, expected, domainRecordApiCall);
-
-                if (updateResponse.IsSuccessStatusCode)
+                var updateResponse = await goDaddyApi.UpdateDnsRecord(client, domain, records, expected);
 
                 Assert.IsTrue(updateResponse.IsSuccessStatusCode);
             }

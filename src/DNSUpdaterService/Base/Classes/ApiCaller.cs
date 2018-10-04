@@ -14,31 +14,31 @@ namespace DNSUpdater
         public async Task UpdateProvider(DusHttpClient client, EventLog log)
         {
             TDomain domain = default;
-            IList<TRecord> record = null;
+            IList<TRecord> records = null;
 
             try
             {
-                var domainResponse = await GetDomain(client, null);
+                var domainResponse = await GetDomain(client);
                 if (domainResponse.IsSuccessStatusCode)
                 {
                     domain = await domainResponse.Content.ReadAsAsync<TDomain>();
                     log.WriteEntry($"Domain Retrieved: {domain.Domain}");
 
-                    var recordResponse = await GetDomainRecords(client, null);
+                    var recordResponse = await GetDomainRecords(client);
                     if (recordResponse.IsSuccessStatusCode)
                     {
-                        record = await recordResponse.Content.ReadAsAsync<IList<TRecord>>();
-                        log.WriteEntry($"Record(s) Retrieved: {record.ToString()}");
+                        records = await recordResponse.Content.ReadAsAsync<IList<TRecord>>();
+                        log.WriteEntry($"Record(s) Retrieved: {records.ToString()}");
 
                         var ip = await DNSUpdaterService.GetPublicIP();
 
-                        if (record[0].data == ip)
+                        if (records.Select(r => r.data).Contains(ip))
                         {
                             log.WriteEntry("DNS up to date, no changes made", EventLogEntryType.Information);
                         }
                         else
                         {
-                            var updateResponse = await UpdateDnsRecord(client, domain, record, ip, null);
+                            var updateResponse = await UpdateDnsRecord(client, domain, records, ip);
                             if (updateResponse.IsSuccessStatusCode)
                             {
                                 log.WriteEntry("DNS Updated Succsessfully", EventLogEntryType.Information);
@@ -55,7 +55,7 @@ namespace DNSUpdater
                         var responseString = await recordResponse.Content.ReadAsStringAsync();
                         EventLog.WriteEntry(recordResponse.ReasonPhrase, responseString, EventLogEntryType.Error);
                     }
-                    }
+                }
                 else
                 {
                     var responseString = await domainResponse.Content.ReadAsStringAsync();
@@ -68,29 +68,29 @@ namespace DNSUpdater
             }
         }
 
-        public async Task<HttpResponseMessage> GetDomain(DusHttpClient client, string domainCall)
+        public async Task<HttpResponseMessage> GetDomain(DusHttpClient client)
         {
-            var response = await client.GetAsync(domainCall ?? client.DomainApiCall);
+            var response = await client.GetAsync(client.DomainApiCall);
             return response;
 
         }
 
-        public async Task<HttpResponseMessage> GetDomainRecords(DusHttpClient client, string recordCall)
+        public async Task<HttpResponseMessage> GetDomainRecords(DusHttpClient client)
         {
-            var response = await client.GetAsync(recordCall ?? client.DomainRecordApiCall);
+            var response = await client.GetAsync(client.DomainRecordApiCall);
             return response;
         }
 
         public async Task<HttpResponseMessage> UpdateDnsRecord(
             DusHttpClient client, 
             TDomain domain, 
-            IList<TRecord> record, 
-            string ip, 
-            string updateCall)
+            IList<TRecord> records, 
+            string ip)
         {
-            record[0].data = ip;
+            var newRecords = records.Where(r => r.name == "@")
+                .Select(r => { r.data = ip; return r; });
 
-            var response = await client.PutAsJsonAsync(updateCall ?? client.DomainUpdateDnsApiCall, record);
+            var response = await client.PutAsJsonAsync(client.DomainRecordApiCall, newRecords);
             return response;
         }
     }

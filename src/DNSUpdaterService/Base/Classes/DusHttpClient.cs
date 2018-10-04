@@ -11,7 +11,5 @@ namespace DNSUpdater.Base
         public MediaTypeWithQualityHeaderValue HeaderValue { get; set; }
         public string DomainApiCall { get; set; }
         public string DomainRecordApiCall { get; set; }
-        public string DomainUpdateDnsApiCall { get; set; }
-
     }
 }
