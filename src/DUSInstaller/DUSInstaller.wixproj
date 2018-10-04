@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>ad8bed25-2b9f-40ef-a9fd-26cec4bffee4</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>DUSInstaller</OutputName>
+    <OutputName>DUSInstaller-$(Configuration)-$(Platform)</OutputName>
     <OutputType>Package</OutputType>
     <Name>DUSInstaller</Name>
   </PropertyGroup>
