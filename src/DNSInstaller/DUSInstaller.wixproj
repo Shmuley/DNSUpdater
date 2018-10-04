@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">$(Configuration)</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">$(Platform)</Platform>
-    <ProductVersion>3.11</ProductVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>ad8bed25-2b9f-40ef-a9fd-26cec4bffee4</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>DNSInstaller</OutputName>
+    <OutputName>DUSInstaller</OutputName>
     <OutputType>Package</OutputType>
     <Name>DUSInstaller</Name>
   </PropertyGroup>
@@ -36,7 +36,7 @@
   <ItemGroup>
     <Compile Include="Components.wxs" />
     <Compile Include="Directories.wxs" />
-    <Compile Include="Product.wxs" />
+    <Compile Include="Products.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
