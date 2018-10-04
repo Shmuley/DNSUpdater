@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNSUpdaterTests", "DNSUpdat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNSUpdaterService", "DNSUpdaterService\DNSUpdaterService.csproj", "{6216C91A-263C-444A-BC63-01735030E1A4}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "DNSInstaller", "DNSInstaller\DNSInstaller.wixproj", "{AD8BED25-2B9F-40EF-A9FD-26CEC4BFFEE4}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "DUSInstaller", "DNSInstaller\DUSInstaller.wixproj", "{AD8BED25-2B9F-40EF-A9FD-26CEC4BFFEE4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6216C91A-263C-444A-BC63-01735030E1A4} = {6216C91A-263C-444A-BC63-01735030E1A4}
 	EndProjectSection
