@@ -36,7 +36,7 @@
   <ItemGroup>
     <Compile Include="Components.wxs" />
     <Compile Include="Directories.wxs" />
-    <Compile Include="Products.wxs" />
+    <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
