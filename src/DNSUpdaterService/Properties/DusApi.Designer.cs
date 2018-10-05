@@ -38,6 +38,18 @@ namespace DNSUpdaterService.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RecordName {
+            get {
+                return ((string)(this["RecordName"]));
+            }
+            set {
+                this["RecordName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string AccessKey {
             get {
                 return ((string)(this["AccessKey"]));

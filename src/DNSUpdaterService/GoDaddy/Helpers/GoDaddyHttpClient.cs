@@ -20,8 +20,10 @@ namespace DNSUpdater
             DefaultRequestHeaders.Accept.Add(HeaderValue);
             DefaultRequestHeaders.Authorization = SsoKey;
 
+            var record = DusApi.Default.RecordName ?? "@";
+
+            DomainRecordApiCall = $"domains/{DusApi.Default.DomainName}/records/A/{record}";
             DomainApiCall = $"domains/{DusApi.Default.DomainName}";
-            DomainRecordApiCall = $"domains/{DusApi.Default.DomainName}/records/A/@";
         }
 
         public override bool Equals(object obj)
