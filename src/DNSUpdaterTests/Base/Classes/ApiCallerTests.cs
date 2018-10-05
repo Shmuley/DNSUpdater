@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace DNSUpdater.Tests
 {
@@ -16,6 +17,7 @@ namespace DNSUpdater.Tests
 
         private readonly string domainApiCall = $"domains/abadds12ddfs345fgd.com";
         private readonly string domainRecordApiCall = $"domains/abadds12ddfs345fgd.com/records/A/@";
+        private readonly EventLog log = new EventLog("DUS Tests",Environment.MachineName, "DUS");
 
         [TestMethod()]
         public async Task UpdateProviderTest()
@@ -29,11 +31,32 @@ namespace DNSUpdater.Tests
                 client.DomainApiCall = domainApiCall;
                 client.DomainRecordApiCall = domainRecordApiCall;
 
-                var apiCaller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>();
+                var apiCaller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>(client, log);
 
-                await apiCaller.UpdateProvider(client, new EventLog("DUSTest", Environment.MachineName, "DUS"));
-
+                await apiCaller.UpdateProvider();
             }
         }
+
+        [TestMethod()]
+        public async Task GetPublicIPTest()
+        {
+            string expected = null;
+            string actual = null;
+
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync("https://api.ipify.org");
+                expected = await response.Content.ReadAsStringAsync();
+            }
+            using (var client = new GoDaddyHttpClient())
+            {
+                var apiCaller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>(client, log);
+                actual = await apiCaller.GetPublicIP();
+            }
+
+
+            Assert.AreEqual(expected, actual);
+        }
+
     }
 }

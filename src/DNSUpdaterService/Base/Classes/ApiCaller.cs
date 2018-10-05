@@ -11,56 +11,20 @@ namespace DNSUpdater
     public class ApiCaller <TDomain, TRecord> : IApiCaller <TDomain, TRecord> 
         where TDomain : IDnsDomain where TRecord : IDnsRecord
     {
-        public async Task UpdateProvider(DusHttpClient client, EventLog log)
-        {
-            TDomain domain = default;
-            IList<TRecord> records = null;
+        private readonly DusHttpClient client;
+        private readonly EventLog log;
 
+        public ApiCaller(DusHttpClient client, EventLog log)
+        {
+            this.client = client;
+            this.log = log;
+        }
+
+        public async Task UpdateProvider()
+        {
             try
             {
-                var domainResponse = await GetDomain(client);
-                if (domainResponse.IsSuccessStatusCode)
-                {
-                    domain = await domainResponse.Content.ReadAsAsync<TDomain>();
-                    log.WriteEntry($"Domain Retrieved: {domain.Domain}");
-
-                    var recordResponse = await GetDomainRecords(client);
-                    if (recordResponse.IsSuccessStatusCode)
-                    {
-                        records = await recordResponse.Content.ReadAsAsync<IList<TRecord>>();
-                        log.WriteEntry($"Record(s) Retrieved: {records.ToString()}");
-
-                        var ip = await DNSUpdaterService.GetPublicIP();
-
-                        if (records.Select(r => r.data).Contains(ip))
-                        {
-                            log.WriteEntry("DNS up to date, no changes made", EventLogEntryType.Information);
-                        }
-                        else
-                        {
-                            var updateResponse = await UpdateDnsRecord(client, domain, records, ip);
-                            if (updateResponse.IsSuccessStatusCode)
-                            {
-                                log.WriteEntry("DNS Updated Succsessfully", EventLogEntryType.Information);
-                            }
-                            else
-                            {
-                                var responseString = await updateResponse.Content.ReadAsStringAsync();
-                                EventLog.WriteEntry(updateResponse.ReasonPhrase, responseString, EventLogEntryType.Error);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var responseString = await recordResponse.Content.ReadAsStringAsync();
-                        EventLog.WriteEntry(recordResponse.ReasonPhrase, responseString, EventLogEntryType.Error);
-                    }
-                }
-                else
-                {
-                    var responseString = await domainResponse.Content.ReadAsStringAsync();
-                    EventLog.WriteEntry(domainResponse.ReasonPhrase, responseString, EventLogEntryType.Error);
-                }
+                await UpdateDnsRecord(await GetDomain(), await GetDomainRecords());
             }
             catch (HttpRequestException ex)
             {
@@ -68,30 +32,74 @@ namespace DNSUpdater
             }
         }
 
-        public async Task<HttpResponseMessage> GetDomain(DusHttpClient client)
+        public async Task<TDomain> GetDomain()
         {
             var response = await client.GetAsync(client.DomainApiCall);
-            return response;
-
+            if (response.IsSuccessStatusCode)
+            {
+                var domain = await response.Content.ReadAsAsync<TDomain>();
+                log.WriteEntry($"Domain Retrieved: {domain.Domain}", EventLogEntryType.Information);
+                return domain;
+            }
+            else
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(responseString);
+            }
         }
 
-        public async Task<HttpResponseMessage> GetDomainRecords(DusHttpClient client)
+        public async Task<IList<TRecord>> GetDomainRecords()
         {
             var response = await client.GetAsync(client.DomainRecordApiCall);
-            return response;
+            if (response.IsSuccessStatusCode)
+            {
+                var records = await response.Content.ReadAsAsync<IList<TRecord>>();
+                log.WriteEntry($"Record(s) Retrieved: {records.ToString()}");
+                return records;
+            }
+            else
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(responseString);
+            }
         }
 
-        public async Task<HttpResponseMessage> UpdateDnsRecord(
-            DusHttpClient client, 
-            TDomain domain, 
-            IList<TRecord> records, 
-            string ip)
+        public async Task UpdateDnsRecord(TDomain domain, IList<TRecord> records)
         {
+            var ip = await GetPublicIP();
+
             var newRecords = records.Where(r => r.name == "@")
                 .Select(r => { r.data = ip; return r; });
 
             var response = await client.PutAsJsonAsync(client.DomainRecordApiCall, newRecords);
-            return response;
+            var responseString = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                log.WriteEntry($"DNS Updated Successfully: {responseString}", EventLogEntryType.Information);
+            }
+            else
+            {
+                throw new HttpRequestException(responseString);
+            }
         }
+
+        public async Task<string> GetPublicIP()
+        {
+            using (var client = new HttpClient())
+            {
+                var uri = new Uri("https://api.ipify.org");
+                var response = await client.GetAsync(uri);
+                var responseString = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    return responseString;
+                }
+                else
+                {
+                    throw new HttpRequestException(responseString);
+                }
+            }
+        }
+
     }
 }

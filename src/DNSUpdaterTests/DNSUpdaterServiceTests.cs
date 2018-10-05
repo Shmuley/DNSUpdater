@@ -9,22 +9,4 @@ using System.Net.Http;
 
 namespace DNSUpdater.Tests
 {
-    [TestClass()]
-    public class DNSUpdaterServiceTests
-    {
-        [TestMethod()]
-        public async Task GetPublicIPTest()
-        {
-            string expected = null;
-
-            using (var client = new HttpClient())
-            {
-                var response = await client.GetAsync("https://api.ipify.org");
-                expected = await response.Content.ReadAsStringAsync();
-            }
-            var actual = await DNSUpdaterService.GetPublicIP();
-
-            Assert.AreEqual(expected, actual);
-        }
-    }
 }

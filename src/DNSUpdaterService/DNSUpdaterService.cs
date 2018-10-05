@@ -53,8 +53,8 @@ namespace DNSUpdater
         {
             using (var client = new GoDaddyHttpClient())
             {
-                var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>();
-                await caller.UpdateProvider(client, EventLog);
+                var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>(client, EventLog);
+                await caller.UpdateProvider();
             }
 
         }
@@ -81,25 +81,6 @@ namespace DNSUpdater
                 }
             }
 
-        }
-
-        public static async Task<string> GetPublicIP()
-        {
-            using (var client = new HttpClient())
-            {
-                var uri = new Uri("https://api.ipify.org");
-                var response = await client.GetAsync(uri);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var ip = await response.Content.ReadAsStringAsync();
-                    return ip;
-                }
-                else
-                {
-                    return null;
-                }
-            }
         }
     }
 }

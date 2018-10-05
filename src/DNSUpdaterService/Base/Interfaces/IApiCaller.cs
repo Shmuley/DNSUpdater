@@ -7,12 +7,14 @@ namespace DNSUpdater.Base
 {
     interface IApiCaller <TDomain, TRecord>
     {
-        Task UpdateProvider(DusHttpClient client, EventLog log);
+        Task UpdateProvider();
 
-        Task<HttpResponseMessage> GetDomain(DusHttpClient client);
+        Task<TDomain> GetDomain();
 
-        Task<HttpResponseMessage> GetDomainRecords(DusHttpClient client);
+        Task<IList<TRecord>> GetDomainRecords();
 
-        Task<HttpResponseMessage> UpdateDnsRecord(DusHttpClient client, TDomain domain, IList<TRecord> record, string ip);
+        Task UpdateDnsRecord(TDomain domain, IList<TRecord> record);
+
+        Task<string> GetPublicIP();
     }
 }
