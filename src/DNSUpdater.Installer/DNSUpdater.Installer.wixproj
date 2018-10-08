@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>40ac63de-e8bb-44e0-ad4e-6726bcd4e7ad</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>DUSInstaller-$(Cofiguration)-$(Platform)</OutputName>
+    <OutputName>DUSInstaller-$(Configuration)-$(Platform)</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
