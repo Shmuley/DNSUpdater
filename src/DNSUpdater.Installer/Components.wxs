@@ -4,12 +4,12 @@
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <!--Id, Keypath, and GUID elements are ommited as they are automatically generated when there is only one File per Component-->
       <Component>
-        <File Source="..\DNSUpdaterService\bin\$(var.Platform)\$(var.Configuration)\DNSUpdaterService.exe" />
+        <File Source="..\DNSUpdater.Service\bin\$(var.Platform)\$(var.Configuration)\DNSUpdaterService.exe" />
         <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Name="DNSUpdaterService" DisplayName="DNS Updater Service" Description="Service for updating your public DNS with your public IP" Account="LocalSystem" Start="auto" ErrorControl="normal" />
         <ServiceControl Id="ServiceUninstall" Name="DNSUpdaterService" Remove="uninstall" Stop="uninstall" Wait="yes" />
       </Component>
       <Component>
-        <File Source="..\DNSUpdaterService\bin\$(var.Platform)\$(var.Configuration)\DNSUpdaterService.exe.config" />
+        <File Source="..\DNSUpdater.Service\bin\$(var.Platform)\$(var.Configuration)\DNSUpdaterService.exe.config" />
         <util:XmlFile
           Id="AccessKey"
           Action="setValue"
@@ -33,16 +33,16 @@
           Value="[DomainName]" />
       </Component>
       <Component>
-        <File Source="..\DNSUpdaterService\bin\$(var.Platform)\$(var.Configuration)\Newtonsoft.Json.dll" />
+        <File Source="..\DNSUpdater.Service\bin\$(var.Platform)\$(var.Configuration)\Newtonsoft.Json.dll" />
       </Component>
       <Component>
-        <File Source="..\DNSUpdaterService\bin\$(var.Platform)\$(var.Configuration)\Newtonsoft.Json.xml" />
+        <File Source="..\DNSUpdater.Service\bin\$(var.Platform)\$(var.Configuration)\Newtonsoft.Json.xml" />
       </Component>
       <Component>
-        <File Source="..\DNSUpdaterService\bin\$(var.Platform)\$(var.Configuration)\System.Net.Http.Formatting.dll" />
+        <File Source="..\DNSUpdater.Service\bin\$(var.Platform)\$(var.Configuration)\System.Net.Http.Formatting.dll" />
       </Component>
       <Component>
-        <File Source="..\DNSUpdaterService\bin\$(var.Platform)\$(var.Configuration)\System.Net.Http.Formatting.xml" />
+        <File Source="..\DNSUpdater.Service\bin\$(var.Platform)\$(var.Configuration)\System.Net.Http.Formatting.xml" />
       </Component>
     </ComponentGroup>
   </Fragment>

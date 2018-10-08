@@ -85,20 +85,19 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Base\Classes\ApiCallerTests.cs" />
-    <Compile Include="DNSUpdaterServiceTests.cs" />
     <Compile Include="GoDaddy\GoDaddyAPICallsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\DNSUpdaterService\App.config">
+    <None Include="..\DNSUpdater.Service\App.config">
       <Link>App.config</Link>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DNSUpdaterService\DNSUpdaterService.csproj">
+    <ProjectReference Include="..\DNSUpdater.Service\DNSUpdater.Service.csproj">
       <Project>{6216c91a-263c-444a-bc63-01735030e1a4}</Project>
-      <Name>DNSUpdaterService</Name>
+      <Name>DNSUpdater.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
