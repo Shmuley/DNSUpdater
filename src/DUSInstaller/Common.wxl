@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+
+  <String Id="ProductName_x86">DNS Updater Service (x86)</String>
+  <String Id="ProductName_x64">DNS Updater Service (x64)</String>
+
+  <String Id="ProductFolderName">DNS Updater Service</String>
+
+  <String Id="Language">1033</String>
+  <String Id="Manufacturer">SmartyPantalones</String>
+  <String Id="Description">Service for updating your public DNS with your public IP</String>
+  <String Id="Keywords">DNS,.NET,Service </String>
+  <String Id="Comments">DNS Updater Service</String>
+  
+  <String Id="DowngradeError">A newer version of [ProductName] is already installed.</String>
+
+</WixLocalization>

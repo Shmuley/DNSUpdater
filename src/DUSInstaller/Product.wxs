@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  
+  <!-- Define which product code to use depending on what platform is used to build-->
+  <?if $(var.Platform)=x64?>
+  <?define ProductCode = "{9DA856C8-2CF7-44D1-86FD-25FFE809411A}"?>
+  <?else?>
+  <?define ProductCode = "{20DD5346-4F15-4958-9682-E8D3C6793966}"?>
+  <?endif?>
+  
+  <?define UpgradeCode = "{5077977F-19D6-42F0-9C34-2C670931CE4B}"?>
+
+    <Product Id="$(var.ProductCode)" 
+             Name="!(loc.ProductName_$(var.Platform))"
+             Language="!(loc.Language)" 
+             Version="!(bind.fileVersion.DNSUpdaterService.exe)" 
+             Manufacturer="!(loc.Manufacturer)" 
+             UpgradeCode="$(var.UpgradeCode)">
+      
+      <Package InstallerVersion="200" 
+                  Compressed="yes" 
+                  InstallScope="perMachine"
+                  Platform="$(var.Platform)"
+                  Manufacturer="!(loc.Manufacturer)"
+                  Description="!(loc.Description)"
+                  Keywords="!(loc.Keywords)"
+                  Comments="!(loc.Comments)
+                  "/>
+      
+      <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+      
+      <MediaTemplate EmbedCab="yes" />
+      
+      <!--Defining what icon to use for the installer and the application-->
+      <Icon Id="icon.ico" SourceFile="$(var.DNSUpdaterService.ProjectDir)app.ico"/>
+      <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+      <Property Id="ARPURLINFOABOUT" Value="https://github.com/SmartyPantalones/DNSUpdater" />
+
+      <!--Create a basic UI-->
+      <UIRef Id="WixUI_Minimal"/>
+      
+      <!--License for the installer-->
+      <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)Assets\License.rtf"/>
+      
+      <Feature Id="ProductFeature" Title="DNS Updater Service" Level="1" Absent="disallow">
+          <ComponentGroupRef Id="ProductComponents" />
+      </Feature>
+           
+      <Property Id="AccessKey"></Property>
+      <Property Id="SecretKey"></Property>
+      <Property Id="DomainName"></Property>
+      
+    </Product>
+  
+</Wix>
