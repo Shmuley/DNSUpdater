@@ -35,7 +35,7 @@ steps:
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
 
-    Contents: '**\bin\$(buildPlatform)\$(BuildConfiguration)\en-us\*.msi'
+    Contents: '**\bin\$(BuildConfiguration)\$(buildPlatform)\en-us\*.msi'
 
     TargetFolder: '$(build.artifactstagingdirectory)'
 
