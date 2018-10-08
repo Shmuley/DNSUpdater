@@ -3,9 +3,9 @@
   
   <!-- Define which product code to use depending on what platform is used to build-->
   <?if $(var.Platform)=x64?>
-  <?define ProductCode = "{9DA856C8-2CF7-44D1-86FD-25FFE809411A}"?>
+  <?define ProductCode = "{19093E4E-8DB4-4A4E-82B5-76E7B5A4BA66}"?>
   <?else?>
-  <?define ProductCode = "{20DD5346-4F15-4958-9682-E8D3C6793966}"?>
+  <?define ProductCode = "{8CA4991A-B610-4DC2-B46D-A28EEECF64D7}"?>
   <?endif?>
   
   <?define UpgradeCode = "{5077977F-19D6-42F0-9C34-2C670931CE4B}"?>
