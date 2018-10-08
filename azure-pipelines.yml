@@ -5,7 +5,7 @@
 
 pool: 'On Premise'
 
-timeoutInMinutes: 2
+timeoutInMinutes: '2'
 
 variables:
   solution: '**/*.sln'
