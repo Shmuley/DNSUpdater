@@ -3,9 +3,9 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/vsts/pipelines/apps/windows/dot-net
 
-pool: 'On Premise'
-
-timeoutInMinutes: '2'
+pool: 
+  name: 'On Premise'
+  timeoutInMinutes: '2'
 
 variables:
   solution: '**/*.sln'
