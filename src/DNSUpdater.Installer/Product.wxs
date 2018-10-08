@@ -32,7 +32,7 @@
       <MediaTemplate EmbedCab="yes" />
       
       <!--Defining what icon to use for the installer and the application-->
-      <Icon Id="icon.ico" SourceFile="$(var.DNSUpdaterService.ProjectDir)\app.ico"/>
+      <Icon Id="icon.ico" SourceFile="$(var.DNSUpdaterService.ProjectDir)app.ico"/>
       <Property Id="ARPPRODUCTICON" Value="icon.ico" />
       <Property Id="ARPURLINFOABOUT" Value="https://github.com/SmartyPantalones/DNSUpdater" />
 
@@ -40,7 +40,7 @@
       <UIRef Id="WixUI_Minimal"/>
       
       <!--License for the installer-->
-      <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\Assets\License.rtf"/>
+      <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)Assets\License.rtf"/>
       
       <Feature Id="ProductFeature" Title="DNS Updater Service" Level="1" Absent="disallow">
           <ComponentGroupRef Id="ProductComponents" />

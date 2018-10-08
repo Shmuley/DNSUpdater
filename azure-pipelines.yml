@@ -5,6 +5,8 @@
 
 pool: 'On Premise'
 
+timeoutInMinutes: 2
+
 variables:
   solution: '**/*.sln'
   buildPlatform: 'x64'
