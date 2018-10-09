@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Configuration;
+using DNSUpdaterService.Properties;
 
 namespace DNSUpdater.Tests
 {

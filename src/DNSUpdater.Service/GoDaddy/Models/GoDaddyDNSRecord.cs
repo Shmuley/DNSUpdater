@@ -13,5 +13,16 @@ namespace DNSUpdater
         //"name": "@",
         //"ttl": 3600,
         //"type": "A"
+
+        public override string ToString()
+        {
+            var str =
+                $"Type: {type} - " +
+                $"Name: {name} - " +
+                $"Data: {data} - " +
+                $"TTL: {ttl}";
+
+            return str;
+        }
     }
 }

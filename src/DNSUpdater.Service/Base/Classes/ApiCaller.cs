@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DNSUpdater.Base;
+using DNSUpdaterService.Properties;
 
 namespace DNSUpdater
 {
@@ -38,7 +39,8 @@ namespace DNSUpdater
             if (response.IsSuccessStatusCode)
             {
                 var domain = await response.Content.ReadAsAsync<TDomain>();
-                log.WriteEntry($"Domain Retrieved: {domain.Domain}", EventLogEntryType.Information);
+                log.WriteEntry($"Domain Retrieved: {domain.Domain}", 
+                    EventLogEntryType.Information);
                 return domain;
             }
             else
@@ -54,7 +56,11 @@ namespace DNSUpdater
             if (response.IsSuccessStatusCode)
             {
                 var records = await response.Content.ReadAsAsync<IList<TRecord>>();
-                log.WriteEntry($"Record(s) Retrieved: {records.ToString()}");
+
+                foreach (var record in records)
+                {
+                    log.WriteEntry($"Record Retrieved: {record.ToString()}");
+                }
                 return records;
             }
             else
@@ -67,19 +73,35 @@ namespace DNSUpdater
         public async Task UpdateDnsRecord(TDomain domain, IList<TRecord> records)
         {
             var ip = await GetPublicIP();
+            var record = records
+                .Where(r => r.name.ToLower()
+                .Contains(DusApi.Default.RecordName.ToLower()))
+                .FirstOrDefault();
 
-            var newRecords = records.Where(r => r.name == "@")
-                .Select(r => { r.data = ip; return r; });
-
-            var response = await client.PutAsJsonAsync(client.DomainRecordApiCall, newRecords);
-            var responseString = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
+            if (record.data == ip)
             {
-                log.WriteEntry($"DNS Updated Successfully: {responseString}", EventLogEntryType.Information);
+                log.WriteEntry($"DNS up to date, no changes made.");
             }
             else
             {
-                throw new HttpRequestException(responseString);
+                var newRecords = records.Where(r => r.name.ToLower()
+                .Contains(DusApi.Default.RecordName.ToLower()))
+                .Select(r => { r.data = ip; return r; });
+
+                var response = await client.PutAsJsonAsync(
+                    client.DomainRecordApiCall, newRecords);
+
+                var responseString = response.ReasonPhrase;
+                if (response.IsSuccessStatusCode)
+                {
+                    log.WriteEntry($"DNS Updated Successfully: {responseString}", 
+                        EventLogEntryType.Information);
+                }
+                else
+                {
+                    throw new HttpRequestException(responseString);
+                }
+
             }
         }
 

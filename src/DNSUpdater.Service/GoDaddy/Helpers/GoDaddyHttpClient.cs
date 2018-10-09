@@ -20,9 +20,14 @@ namespace DNSUpdater
             DefaultRequestHeaders.Accept.Add(HeaderValue);
             DefaultRequestHeaders.Authorization = SsoKey;
 
-            var record = DusApi.Default.RecordName ?? "@";
+            //Need to test and make sure this is actually setting the property
+            if (string.IsNullOrEmpty(DusApi.Default.RecordName))
+            {
+                DusApi.Default.RecordName = "@";
+                DusApi.Default.Save();
+            }
 
-            DomainRecordApiCall = $"domains/{DusApi.Default.DomainName}/records/A/{record}";
+            DomainRecordApiCall = $"domains/{DusApi.Default.DomainName}/records/A/{DusApi.Default.RecordName}";
             DomainApiCall = $"domains/{DusApi.Default.DomainName}";
         }
 
