@@ -30,23 +30,37 @@ namespace DNSUpdater
             OnStop();
         }
 
-        protected override void OnStart(string[] args)
+        protected async override void OnStart(string[] args)
         {
-            if (DusApi.Default.DomainName == null || DusApi.Default.AccessKey == null || DusApi.Default.SecretKey == null)
+            if (string.IsNullOrEmpty(DusApi.Default.DomainName) ||
+                string.IsNullOrEmpty(DusApi.Default.AccessKey)  ||
+                string.IsNullOrEmpty(DusApi.Default.SecretKey))
             {
-                throw new NullReferenceException("A domain name, access key, or secret key has " +
-                    "not been specified in the application config file. Please specify these settings and try again.");
+                throw new NullReferenceException(
+                    "A domain name, access key, or secret key has " +
+                    "not been specified in the application config file. " +
+                    "Please specify these settings and try again.");
             }
 
             EncryptConfigSection("userSettings/DNSUpdaterService.Properties.DusApi");
 
-            Timer timer = new Timer()
+            if (Environment.UserInteractive)
             {
-                Interval = 300000
-            };
-            timer.Elapsed += new ElapsedEventHandler(OnTimer);
-            timer.Start();
-
+                using (var client = new GoDaddyHttpClient())
+                {
+                    var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>(client, EventLog);
+                    await caller.UpdateProvider();
+                }
+            }
+            else
+            {
+                Timer timer = new Timer()
+                {
+                    Interval = 300000
+                };
+                timer.Elapsed += new ElapsedEventHandler(OnTimer);
+                timer.Start();
+            }
         }
 
         private async void OnTimer(object sender, ElapsedEventArgs e)
@@ -56,7 +70,6 @@ namespace DNSUpdater
                 var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>(client, EventLog);
                 await caller.UpdateProvider();
             }
-
         }
 
         protected override void OnStop()
