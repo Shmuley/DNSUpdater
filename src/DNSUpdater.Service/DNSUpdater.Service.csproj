@@ -101,9 +101,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Classes\RegistrarFactory.cs" />
     <Compile Include="Base\Interfaces\IApiCaller.cs" />
     <Compile Include="Base\Interfaces\IDnsDomain.cs" />
     <Compile Include="Base\Interfaces\IDnsRecord.cs" />
+    <Compile Include="Base\Interfaces\IRegistrar.cs" />
     <Compile Include="DNSUpdaterService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -113,6 +115,7 @@
     <Compile Include="Base\Classes\ApiCaller.cs" />
     <Compile Include="GoDaddy\Helpers\GoDaddyHttpClient.cs" />
     <Compile Include="Base\Classes\DusHttpClient.cs" />
+    <Compile Include="GoDaddy\GoDaddyRegistrar.cs" />
     <Compile Include="GoDaddy\Models\GoDaddyDnsRecord.cs" />
     <Compile Include="GoDaddy\Models\GoDaddyDomain.cs" />
     <Compile Include="Program.cs" />
@@ -124,7 +127,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DusApi.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

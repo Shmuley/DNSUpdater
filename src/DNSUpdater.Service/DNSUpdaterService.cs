@@ -6,6 +6,7 @@ using System.Timers;
 using System.Configuration;
 using System.Threading.Tasks;
 using DNSUpdaterService.Properties;
+using DNSUpdaterService.Base.Classes;
 
 namespace DNSUpdater
 {
@@ -46,11 +47,8 @@ namespace DNSUpdater
 
             if (Environment.UserInteractive)
             {
-                using (var client = new GoDaddyHttpClient())
-                {
-                    var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>(client, EventLog);
-                    await caller.UpdateProvider();
-                }
+                var registrar = RegistrarFactory.CreateRegistrar();
+                await registrar.UpdateRegistrar(EventLog);
             }
             else
             {
@@ -67,8 +65,8 @@ namespace DNSUpdater
         {
             using (var client = new GoDaddyHttpClient())
             {
-                var caller = new ApiCaller<GoDaddyDomain, GoDaddyDnsRecord>(client, EventLog);
-                await caller.UpdateProvider();
+                var registrar = RegistrarFactory.CreateRegistrar();
+                await registrar.UpdateRegistrar(EventLog);
             }
         }
 

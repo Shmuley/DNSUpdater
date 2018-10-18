@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace DNSUpdater.Base
 {
-    interface IApiCaller <TDomain, TRecord>
+    public interface IApiCaller <TDomain, TRecord> 
+        where TDomain : IDnsDomain 
+        where TRecord : IDnsRecord
     {
         Task UpdateProvider();
 
