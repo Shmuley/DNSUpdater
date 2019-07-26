@@ -63,11 +63,8 @@ namespace DNSUpdater
 
         private async void OnTimer(object sender, ElapsedEventArgs e)
         {
-            using (var client = new GoDaddyHttpClient())
-            {
-                var registrar = RegistrarFactory.CreateRegistrar();
-                await registrar.UpdateRegistrar(EventLog);
-            }
+            var registrar = RegistrarFactory.CreateRegistrar();
+            await registrar.UpdateRegistrar(EventLog);
         }
 
         protected override void OnStop()
