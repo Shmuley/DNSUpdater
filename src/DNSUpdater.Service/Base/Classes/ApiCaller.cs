@@ -86,7 +86,8 @@ namespace DNSUpdater
             {
                 var newRecords = records.Where(r => r.name.ToLower()
                 .Contains(DusApi.Default.RecordName.ToLower()))
-                .Select(r => { r.data = ip; return r; });
+                .Select(r => { r.data = ip; return r; })
+                .ToList();
 
                 var response = await client.PutAsJsonAsync(
                     client.DomainRecordApiCall, newRecords);
