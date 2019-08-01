@@ -16,7 +16,7 @@ namespace DNSUpdater.Tests
     {
         private readonly string _domain = "abadds12ddfs345fgd.com";
         private readonly string _domainApiCall = $"domains/abadds12ddfs345fgd.com";
-        private readonly string _domainRecordApiCall = $"domains/abadds12ddfs345fgd.com/records/A/@";
+        private readonly string _domainRecordApiCall = $"domains/abadds12ddfs345fgd.com/records/A";
         private readonly EventLog _log = new EventLog("DUS Tests", Environment.MachineName, "DUS");
 
         [TestMethod()]
