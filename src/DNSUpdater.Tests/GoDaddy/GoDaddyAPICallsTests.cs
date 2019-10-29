@@ -14,9 +14,9 @@ namespace DNSUpdater.Tests
     [TestClass()]
     public class GoDaddyAPICallsTests
     {
-        private readonly string _domain = "abadds12ddfs345fgd.com";
-        private readonly string _domainApiCall = $"domains/abadds12ddfs345fgd.com";
-        private readonly string _domainRecordApiCall = $"domains/abadds12ddfs345fgd.com/records/A";
+        private static readonly string _domain = "123mainst.cc";
+        private readonly string _domainApiCall = $"domains/{_domain}";
+        private readonly string _domainRecordApiCall = $"domains/{_domain}/records/A";
         private readonly EventLog _log = new EventLog("DUS Tests", Environment.MachineName, "DUS");
 
         [TestMethod()]
